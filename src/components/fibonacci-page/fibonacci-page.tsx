@@ -1,4 +1,4 @@
-import React, { FormEvent, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import s from "./fib.module.css";
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
@@ -15,7 +15,19 @@ export const FibonacciPage: React.FC = () => {
   const fibonacci = useRef<Array<number>>([]);
   const timer = useRef<NodeJS.Timeout>();
 
+  useEffect(() => {
+    return () => {
+      if (timer.current) {
+        clearInterval(timer.current);
+      }
+    }
+  }, [])
+
   const showCircles = () => {
+    if (!fibonacci.current) {
+      setLoader(false);
+      return num;
+    };
     timer.current = setInterval(() => {
       setNum((prevNum) => {
         const nextNum = prevNum + 1;
@@ -44,18 +56,20 @@ export const FibonacciPage: React.FC = () => {
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
       <form className={s.layout} onSubmit={handleSubmit}>
-        <Input extraClass={s.input} type="num" name="fib" value={fib} isLimitText={true} max={19} onChange={(e: any) => setFib(e.target.value)} />
+        <Input extraClass={s.input} type="num" name="fib" value={fib!} isLimitText={true} max={19} onChange={(e: any) => setFib(e.target.value)} />
         <Button text="Рассчитать" type="submit" isLoader={loader} />
       </form>
+      {fibonacci.current &&
       <ul className={s.ul}>
         {fibonacci.current.slice(0, num).map((letter, index) => {
           return (
-            <li>
+            <li key={index}>
               <Circle letter={letter.toString()} />
             </li>
           )
         })}
       </ul>
+}
     </SolutionLayout>
   );
 };
