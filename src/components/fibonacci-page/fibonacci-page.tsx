@@ -21,12 +21,12 @@ export const FibonacciPage: React.FC = () => {
         clearInterval(timer.current);
       }
     }
-  }, [])
+  }, []);
 
   const showCircles = () => {
     if (!fibonacci.current) {
       setLoader(false);
-      return num;
+      return;
     };
     timer.current = setInterval(() => {
       setNum((prevNum) => {
