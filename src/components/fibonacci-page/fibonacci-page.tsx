@@ -39,7 +39,7 @@ export const FibonacciPage: React.FC = () => {
 
         return nextNum;
       })
-    }, 500)
+    }, 500);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
