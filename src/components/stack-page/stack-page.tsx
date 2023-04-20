@@ -1,34 +1,44 @@
-import React, { FormEvent, useRef, useState } from "react";
+import React, { FormEvent, useRef, useState, useEffect } from "react";
 import s from './stack.module.css';
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Stack } from "./algorithm";
 import { Circle } from "../ui/circle/circle";
+import { ElementStates } from "../../types/element-states";
+
+const setDelay = (time: number) => {
+  return new Promise((res) => setTimeout(res, time));
+}
 
 export const StackPage: React.FC = () => {
 
   const [value, setValue] = useState('');
   const [loader, setLoader] = useState(false);
   const [res, setRes] = useState<Array<string>>([]);
+  const [topIndex, setTopIndex] = useState(-1);
   const ref = useRef(new Stack());
 
   const showCircles = () => {
     const stack = ref.current.array();
-    setRes(stack.length > 0 ? stack.map((el) => String(el)) : [])
-  };
-  console.log(res);
-  const addElement = () => {
-    setLoader(true);
-    ref.current.push(value);
-    setLoader(false);
-    showCircles();
-    setValue('');
+    setRes(stack.length > 0 ? stack.map((el) => String(el)) : []);
   };
 
-  const removeElement = () => {
+  const addElement = async () => {
+    setLoader(true);
+    setValue('');
+    ref.current.push(value);
+    showCircles();
+    await setDelay(500);
+    setTopIndex(ref.current.index);
+    setLoader(false);
+  };
+
+  const removeElement =  async () => {
     setLoader(true);
     ref.current.pop();
+    await setDelay(500);
+    setTopIndex(-1);
     setLoader(false);
     showCircles();
   };
@@ -59,7 +69,11 @@ export const StackPage: React.FC = () => {
         {res.map((el, index) => {
           return (
             <li key={index} >
-              <Circle index={index} letter={el} head={index === res!.length - 1 ? "top" : undefined} />
+              <Circle 
+              index={index} 
+              letter={el} 
+              head={index === res!.length - 1 ? "top" : undefined} 
+              state={index === topIndex ? ElementStates.Changing : ElementStates.Default} />
             </li>
           )
         }

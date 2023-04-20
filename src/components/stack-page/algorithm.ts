@@ -1,11 +1,10 @@
 interface IStack<T> {
   push: (item: T) => void;
   pop: () => void;
-  // peak: () => T | null;
-
+  peak: () => T | null;
   clear: () => void;
   array: () => T[];
-
+  index: number;
   size: number;
 }
 
@@ -20,12 +19,12 @@ export class Stack<T> implements IStack<T> {
     this.container.pop();
   }
 
-  // peak = () => {
-  //   if (this.size > 0) {
-  //     return this.container[length];
-  //   } 
-  //   return null;
-  // }
+  peak = () => {
+    if (this.size > 0) {
+      return this.container[length];
+    } 
+    return null;
+  }
 
   clear = (): void => {
     if (this.size > 0) {
@@ -39,5 +38,9 @@ export class Stack<T> implements IStack<T> {
 
   get size() {
     return this.container.length;
+  }
+
+  get index() {
+    return this.size - 1;
   }
 };
