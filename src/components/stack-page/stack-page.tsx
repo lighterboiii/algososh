@@ -1,42 +1,70 @@
-import React, { useState } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import s from './stack.module.css';
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Stack } from "./algorithm";
+import { Circle } from "../ui/circle/circle";
 
 export const StackPage: React.FC = () => {
+
   const [value, setValue] = useState('');
-  const container: any = [];
+  const [loader, setLoader] = useState(false);
+  const [res, setRes] = useState<Array<string>>([]);
+  const ref = useRef(new Stack());
 
-  const pushItem = (item: any) => {
-    container.push(item);
+  const showCircles = () => {
+    const stack = ref.current.array();
+    setRes(stack.length > 0 ? stack.map((el) => String(el)) : [])
+  };
+  console.log(res);
+  const addElement = () => {
+    setLoader(true);
+    ref.current.push(value);
+    setLoader(false);
+    showCircles();
+    setValue('');
   };
 
-  const popItem = () => {
-    if (container.length > 0) {
-      container.pop();
-    }
+  const removeElement = () => {
+    setLoader(true);
+    ref.current.pop();
+    setLoader(false);
+    showCircles();
   };
 
-  const handleSubmit = () => {
-    
-  }
+  const handleClear = () => {
+    setLoader(true);
+    setValue('');
+    ref.current.clear();
+    setLoader(false);
+    showCircles();
+  };
 
   return (
     <SolutionLayout title="Стек">
-      <div className={s.wrapper} >
-        <div className={s.inner} >
+      <form className={s.wrapper} onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()}>
+        <div className={s.inner}>
           <Input extraClass={s.input}
             maxLength={4}
             value={value}
             onChange={(e: any) => setValue(e.target.value)}
             isLimitText={true} />
-          <Button text='Добавить' type='submit' disabled={!value} />
-          <Button text='Удалить' type='button' disabled />
+          <Button text='Добавить' type='submit' disabled={!value} onClick={addElement} isLoader={loader} />
+          <Button text='Удалить' type='button' disabled={res.length === 0} onClick={removeElement} isLoader={loader} />
         </div>
-        <Button text='Очистить' type='reset' disabled />
-      </div>
+        <Button text='Очистить' type='reset' disabled={res.length === 0} onClick={handleClear} />
+      </form>
+      <ul className={s.ul} >
+        {res.map((el, index) => {
+          return (
+            <li key={index} >
+              <Circle index={index} letter={el} head={index === res!.length - 1 ? "top" : undefined} />
+            </li>
+          )
+        }
+        )}
+      </ul>
     </SolutionLayout>
   );
 };
