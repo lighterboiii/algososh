@@ -4,7 +4,7 @@ export const getFibonacciNumbers = (num: any) => {
     return;
   }
   let array: number[] = [1, 1];
-  for (let i = 2; i < num; i++) {
+  for (let i = 2; i <= num; i++) {
     array.push(array[i - 2] + array[i - 1]);
   }
 

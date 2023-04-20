@@ -45,7 +45,7 @@ export const StackPage: React.FC = () => {
     showCircles();
   };
 
-  const handleClear = () => {
+  const handleClear = async () => {
     setLoader(true);
     setValue('');
     ref.current.clear();
@@ -65,7 +65,7 @@ export const StackPage: React.FC = () => {
           <Button text='Добавить' type='submit' disabled={!value} onClick={addElement} isLoader={loader} />
           <Button text='Удалить' type='button' disabled={res.length === 0} onClick={removeElement} isLoader={loader} />
         </div>
-        <Button text='Очистить' type='reset' disabled={res.length === 0} onClick={handleClear} />
+        <Button text='Очистить' type='reset' disabled={res.length === 0} onClick={handleClear} isLoader={loader} />
       </form>
       <ul className={s.ul} >
         {res.map((el, index) => {
