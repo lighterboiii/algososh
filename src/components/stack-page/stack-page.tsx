@@ -29,13 +29,15 @@ export const StackPage: React.FC = () => {
     setValue('');
     ref.current.push(value);
     showCircles();
-    await setDelay(500);
     setTopIndex(ref.current.index);
+    await setDelay(500);
+    setTopIndex(-1);
     setLoader(false);
   };
 
   const removeElement =  async () => {
     setLoader(true);
+    setTopIndex(ref.current.index);
     ref.current.pop();
     await setDelay(500);
     setTopIndex(-1);
