@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import s from './list.module.css';
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
@@ -7,6 +7,10 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 
 
 export const ListPage: React.FC = () => {
+
+  const [list, setList] = useState([1, 9, 9, 6]);
+  const [loader, setLoader] = useState(false);
+
   return (
     <SolutionLayout title="Связный список">
       <div className={s.container} >
@@ -23,6 +27,15 @@ export const ListPage: React.FC = () => {
           <Button text="Добавить удалить по индексу" type="submit" extraClass={s.button} />
         </form>
       </div>
+      <ul className={s.ul}>
+        {list.map((el, index) => {
+          return (
+            <li key={index}>
+              <Circle letter={el.toString()} />
+            </li>
+          )
+        })}
+      </ul>
     </SolutionLayout>
   );
 };

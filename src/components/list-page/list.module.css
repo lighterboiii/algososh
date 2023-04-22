@@ -24,3 +24,14 @@
   gap: 12px;
   margin-bottom: 90px;
 }
+
+.ul {
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
