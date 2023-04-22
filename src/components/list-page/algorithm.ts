@@ -16,8 +16,8 @@ interface ILinkedList<T> {
   length: number;
   prepend(node: T): void;
   append(node: T): void;
-  removeHead(): T | null;
-  removeTail(): ListNode<T> | null;
+  removeHead: () => void;
+  removeTail: () => void;
   addAtIndex(node: T, index: number): void;
   removeAtIndex(index: number): T | null;
   toArray(): T[];
@@ -97,6 +97,16 @@ export class LinkedList<T> implements ILinkedList<T> {
     }
   }
 
+  removeHead() {
+    if (!this.head) {
+      return null;
+    }
+    if (this.head && this.head.next) {
+      this.head = this.head.next;
+      this.size--;
+    }
+  }
+
   removeTail() {
     if (!this.head || !this.head.next) {
       return null
@@ -111,8 +121,6 @@ export class LinkedList<T> implements ILinkedList<T> {
     }
 
     prev!.next = null;
-    
-    return this.head;
   }
 
   get length() {
