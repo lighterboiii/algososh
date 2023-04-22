@@ -1,0 +1,26 @@
+.layout {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 952px;
+}
+
+.input {
+  max-width: 204px;
+}
+
+.smallButton {
+  width: 175px;
+}
+
+.button {
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 90px;
+}
