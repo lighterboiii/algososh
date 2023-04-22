@@ -31,6 +31,7 @@ export const ListPage: React.FC = () => {
         {list.map((el, index) => {
           return (
             <li key={index}>
+              <Circle isSmall={true} letter={'head'} />
               <Circle letter={el.toString()} />
             </li>
           )
