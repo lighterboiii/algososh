@@ -19,11 +19,11 @@ interface ILinkedList<T> {
   removeHead: () => void;
   removeTail: () => void;
   addAtIndex(node: T, index: number): void;
-  removeAtIndex(index: number): T | null;
+  removeAtIndex(index: number): void;
   toArray(): T[];
 }
 
-export class LinkedList<T> implements ILinkedList<T> {
+export class LinkedList<T extends ListNode<null>> implements ILinkedList<T> {
   private head: ListNode<T> | null;
   private tail: ListNode<T> | null;
   private size: number;
@@ -122,6 +122,50 @@ export class LinkedList<T> implements ILinkedList<T> {
 
     prev!.next = null;
   }
+
+  removeAtIndex(index: number) {
+    if (index < 0 || index >= this.size) {
+      return null;
+    }
+
+    let removedNode = new ListNode(null);
+    let prev = null;
+    let curr = this.head;
+    let currIndex = 0;
+
+    while (curr && currIndex < index) {
+      prev = curr;
+      curr = curr.next;
+      currIndex++;
+    }
+
+    if (curr) {
+      removedNode = curr.value;
+      prev!.next = curr.next;
+      curr.next = null;
+    }
+
+    if (removedNode) {
+      this.size--;
+    }
+  
+    return removedNode;
+  }
+
+  toArray() {
+    let array: T[] = [];
+    let curr = this.head;
+
+    if (curr) {
+      while (curr.next) {
+        array.push(curr.value);
+        curr = curr?.next;
+      }
+      array.push(curr.value);
+    }
+    return array;
+  }
+
 
   get length() {
     return this.size;
