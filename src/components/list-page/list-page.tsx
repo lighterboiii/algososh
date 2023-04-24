@@ -5,43 +5,29 @@ import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { LinkedList } from "./algorithm";
-import { ElementStates } from "../../types/element-states";
+import { generateArray, IArray } from "./utils";
 import { setDelay } from "../../constants/setDelay";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 
 export const ListPage: React.FC = () => {
-  function generateArray(): number[] {
-    const size = Math.floor(Math.random() * (6 - 2)) + 2;
-    const array: number[] = [];
-  
-    for (let i = 0; i < size; i++) {
-      const randomNumber = Math.floor(Math.random() * (100 - 0)) + 0;
-      array.push(randomNumber);
-    }
-  
-    return array;
-  };
-  const linkedList = useRef(new LinkedList(generateArray().map((el) => String(el))));
 
   const [loader, setLoader] = useState(false);
   const [value, setValue] = useState('');
-  const [list, setList] = useState<Array<string>>([]);
+  const [list, setList] = useState<Array<IArray>>([]);
   const [index, setIndex] = useState(-1);
 
   const showCircles = () => {
-    setList(linkedList.current.toArray().map(item => {
-      return item;
-    }))
+    setList(generateArray);
   };
 
-  const addToHead = async () => {
-    setLoader(true);
-    linkedList.current.prepend(value);
-  }
+  // const addToHead = async () => {
+  //   setLoader(true);
+  //   linkedList.current.prepend(value);
+  // }
 
-  // useEffect(() => {
-  //   showCircles();
-  // }, []);
+  useEffect(() => {
+    showCircles();
+  }, []);
 
 
   return (
@@ -64,7 +50,7 @@ export const ListPage: React.FC = () => {
           {list.map((el, index) => {
             return (
               <li key={index} className={s.li} >
-                <Circle letter={`${el}`} head='head' tail='tail' index={index} />
+                <Circle letter={el.value} index={index} />
                 {index !== list.length - 1 &&
                   <ArrowIcon />
                 }
