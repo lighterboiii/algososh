@@ -19,27 +19,12 @@ export const SortingPage: React.FC = () => {
   const generateArray = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const newArr = randomArr();
-
-    setArray(randomArr);
-    console.log(newArr)
+    setArray(newArr);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setRadio(e.target.value);
   };
-
-  const handleBubbleSort = (array: Array<number>, direction: Direction) => {
-    setLoader(true);
-    const length = array.length;
-    for (let i = 0; i < length - 1; i++) {
-      for (let j = 0; j < length - i - 1; j++) {
-        if (array[j] > array[j + 1]) {
-          [array[j], array[j + 1]] = [array[j + 1], array[j]];
-        }
-      }
-    }
-    setLoader(false);
-  }; // доделать
 
   const selectionSort = async (array: Array<ISort>, direction: Direction) => {
     setLoader(true);
@@ -71,13 +56,35 @@ export const SortingPage: React.FC = () => {
     setLoader(false);
   };
 
+  const bubbleSort = async (array: Array<ISort>, direction: Direction) => {
+    setLoader(true);
+    const length = array.length;
+    for (let i = 0; i <= length - 1; i++) {
+      for (let j = 0; j < length - i - 1; j++) {
+        array[j].state = ElementStates.Changing;
+        array[j + 1].state = ElementStates.Changing;
+
+        await setDelay(SHORT_DELAY_IN_MS);
+
+        if (direction === Direction.Descending ? array[j].value < array[j + 1].value : array[j].value > array[j + 1].value) {
+          sort(array, j, j + 1);
+          array[j].state = ElementStates.Default;
+          setArray([...array]);
+        }
+      }
+      array[array.length - i - 1].state = ElementStates.Modified;
+      setArray([...array]);
+    }
+    setLoader(false);
+  }; 
+
   const handleSort = (direction: Direction) => {
     if (radio === 'selectionSort') {
       selectionSort(array, direction);
   } 
-    // else if (radio === 'bubbleSort') {
-    //   handleBubbleSort(array, direction);
-    // }
+    else if (radio === 'bubbleSort') {
+      bubbleSort(array, direction);
+    }
   };
 
   return (
