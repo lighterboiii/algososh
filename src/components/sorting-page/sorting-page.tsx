@@ -10,7 +10,6 @@ import { ElementStates } from "../../types/element-states";
 import { setDelay } from "../../constants/setDelay";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
-
 export const SortingPage: React.FC = () => {
   const [array, setArray] = useState<Array<ISort>>([]);
   const [radio, setRadio] = useState('selectionSort');
