@@ -4,6 +4,7 @@
   flex-direction: row;
   gap: 12px;
   width: 952px;
+  border: none;
 }
 
 .input {
@@ -34,4 +35,11 @@
   gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 21px;
 }

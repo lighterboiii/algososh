@@ -13,3 +13,12 @@
 .circle {
   margin: 0 auto;
 }
+
+.list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  list-style: none;
+  justify-content: center;
+  gap: 16px;
+}

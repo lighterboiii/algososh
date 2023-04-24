@@ -11,17 +11,18 @@ interface IStack<T> {
 export class Stack<T> implements IStack<T> {
   private container: T[] = [];
 
-  push = (item: T): void => {
+  push = (item: T) => {
     this.container.push(item);
   }
 
-  pop = (): void => {
+  pop = () => {
     this.container.pop();
   }
 
   peak = () => {
     if (this.size > 0) {
-      return this.container[length];
+// eslint-disable-next-line
+      return this.container[length - 1]; 
     } 
     return null;
   }

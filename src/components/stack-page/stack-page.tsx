@@ -6,10 +6,8 @@ import { Button } from "../ui/button/button";
 import { Stack } from "./algorithm";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
-
-const setDelay = (time: number) => {
-  return new Promise((res) => setTimeout(res, time));
-}
+import { setDelay } from "../../constants/setDelay";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 export const StackPage: React.FC = () => {
 
@@ -30,7 +28,7 @@ export const StackPage: React.FC = () => {
     ref.current.push(value);
     showCircles();
     setTopIndex(ref.current.index);
-    await setDelay(500);
+    await setDelay(SHORT_DELAY_IN_MS);
     setTopIndex(-1);
     setLoader(false);
   };
@@ -39,7 +37,7 @@ export const StackPage: React.FC = () => {
     setLoader(true);
     setTopIndex(ref.current.index);
     ref.current.pop();
-    await setDelay(500);
+    await setDelay(SHORT_DELAY_IN_MS);
     setTopIndex(-1);
     setLoader(false);
     showCircles();

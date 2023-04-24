@@ -6,9 +6,9 @@ class ListNode<T> implements ILinkedListNode<T> {
   public value: T;
   public next: ILinkedListNode<T> | null;
 
-  constructor(value: T, next: ILinkedListNode<T> | null = null) {
+  constructor(value: T, next?: ILinkedListNode<T> | null) {
     this.value = value;
-    this.next = next;
+    this.next = next === undefined ? null : next;
   }
 };
 
@@ -23,15 +23,23 @@ interface ILinkedList<T> {
   toArray(): T[];
 }
 
-export class LinkedList<T extends ListNode<null>> implements ILinkedList<T> {
+export class LinkedList<T> implements ILinkedList<T> {
   private head: ListNode<T> | null;
   private tail: ListNode<T> | null;
   private size: number;
 
-  constructor() {
+  constructor(array: Array<T>) {
     this.head = null;
     this.tail = null;
     this.size = 0;
+
+    if (array && array.length > 0) {
+      this.fillList(array);
+    }
+  }
+
+  protected fillList(array: Array<T>) {
+    array.forEach((el) => this.append(el));
   }
 
   private isEmpty() {
@@ -128,28 +136,31 @@ export class LinkedList<T extends ListNode<null>> implements ILinkedList<T> {
       return null;
     }
 
-    let removedNode = new ListNode(null);
-    let prev = null;
-    let curr = this.head;
-    let currIndex = 0;
+    let prev = this.head;
+    let current = this.head;
+    let i = 0;
 
-    while (curr && currIndex < index) {
-      prev = curr;
-      curr = curr.next;
-      currIndex++;
+    while (i !== index) {
+      if (current && current.next) {
+        prev = current;
+        current = current.next;
+      }
+
+      i++;
     }
 
-    if (curr) {
-      removedNode = curr.value;
-      prev!.next = curr.next;
-      curr.next = null;
+    if (prev && current) {
+      if (current === this.head) {
+        this.head = this.head.next;
+      } else if (current === this.tail) {
+        prev.next = null;
+        this.tail = prev;
+      } else {
+        prev.next = current.next;
+      }
     }
 
-    if (removedNode) {
-      this.size--;
-    }
-  
-    return removedNode;
+    this.size--;
   }
 
   toArray() {
@@ -170,4 +181,4 @@ export class LinkedList<T extends ListNode<null>> implements ILinkedList<T> {
   get length() {
     return this.size;
   }
-}
+};
