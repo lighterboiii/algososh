@@ -38,7 +38,7 @@ export class Queue<T> implements IQueue<T> {
     if (this.isEmpty()) {
       throw new Error("No elements in the queue");
     }
-     return this.container[this.head % this.size]
+     return this.container[this.head % this.size];
   };
 
   isEmpty = () => this.length === 0;
