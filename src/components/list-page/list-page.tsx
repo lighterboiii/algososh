@@ -24,12 +24,15 @@ export const ListPage: React.FC = () => {
     setList(linkedList.toArray());
   }, []);
 
-console.log(list)
+  console.log(list)
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue({ ...inputValue, [e.target.name]: e.target.value });
   };
 
   const addToHead = async () => {
+    if (!inputValue.value || inputValue.value.trim() === '') {
+      throw new Error('Enter a value');
+    }
     setLoader(true);
     const newNode = { value: inputValue.value, state: ElementStates.Default };
     linkedList.prepend(newNode);
@@ -41,6 +44,9 @@ console.log(list)
   };
 
   const addToTail = async () => {
+    if (!inputValue.value || inputValue.value.trim() === '') {
+      throw new Error('Enter a value');
+    }
     setLoader(true);
     const newNode = { value: inputValue.value, state: ElementStates.Default };
     linkedList.append(newNode);
@@ -71,8 +77,11 @@ console.log(list)
   };
 
   const insertAt = async () => {
+    if (!inputValue.value || inputValue.value.trim() === '') {
+      throw new Error('Enter a value');
+    }
     setLoader(true);
-    const newNode = { value: inputValue.value, index: inputValue.index , state: ElementStates.Default };
+    const newNode = { value: inputValue.value, index: inputValue.index, state: ElementStates.Default };
     if (newNode.index > linkedListSize) {
       throw new Error('Index is bigger then list size. Enter valid index')
     }
@@ -101,15 +110,15 @@ console.log(list)
     <SolutionLayout title="Связный список">
       <form className={s.container} >
         <fieldset className={s.layout} name='tailhead' >
-          <Input 
-          extraClass={s.input} 
-          type='text' 
-          name="value" 
-          value={inputValue.value}
-          placeholder="Введите значение" 
-          isLimitText={true} 
-          maxLength={4} 
-          onChange={handleChange} />
+          <Input
+            extraClass={s.input}
+            type='text'
+            name="value"
+            value={inputValue.value}
+            placeholder="Введите значение"
+            isLimitText={true}
+            maxLength={4}
+            onChange={handleChange} />
           <Button text="Добавить в head" type="button" extraClass={s.smallButton} onClick={addToHead} isLoader={loader} />
           <Button text="Добавить в tail" type="button" extraClass={s.smallButton} onClick={addToTail} isLoader={loader} />
           <Button text="Удалить из head" type="button" extraClass={s.smallButton} onClick={removeFromHead} isLoader={loader} />
@@ -122,17 +131,17 @@ console.log(list)
         </fieldset>
       </form>
       <ul className={s.ul}>
-          { list.map((el, index) => {
-            return (
-              <li key={index} className={s.li} >
-   {/* @ts-ignore */}
-                <Circle letter={el.value.value} index={index} />
-                {index !== list.length - 1 &&
-                  <ArrowIcon />
-                }
-              </li>
-            )
-          })}
+        {list.map((el, index) => {
+          return (
+            <li key={index} className={s.li} >
+              {/* @ts-ignore */}
+              <Circle letter={el.value.value} index={index} />
+              {index !== list.length - 1 &&
+                <ArrowIcon />
+              }
+            </li>
+          )
+        })}
       </ul>
     </SolutionLayout>
   );
