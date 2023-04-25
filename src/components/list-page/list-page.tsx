@@ -16,11 +16,13 @@ export const ListPage: React.FC = () => {
   const linkedListSize = linkedList.getSize();
   const [loader, setLoader] = useState(false);
   const [inputValue, setInputValue] = useState({ value: '', index: 0 });
-  const [list, setList] = useState<IArray[]>([]);
+  const [list, setList] = useState<IListNode<IArray>[]>([]);
+  const [topCircle, setTopCircle] = useState(false);
+  const [bottomCircle, setBottomCircle] = useState(false);
+  const [changingIndex, setChangingIndex] = useState(-1);
 
   useEffect(() => {
     setLinkedList();
-    // @ts-ignore
     setList(linkedList.toArray());
   }, []);
 
@@ -36,9 +38,10 @@ export const ListPage: React.FC = () => {
     setLoader(true);
     const newNode = { value: inputValue.value, state: ElementStates.Default };
     linkedList.prepend(newNode);
+    setTopCircle(true);
     setInputValue({ value: '', index: 0 });
     await setDelay(SHORT_DELAY_IN_MS);
-    // @ts-ignore
+    setTopCircle(false);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
@@ -50,9 +53,10 @@ export const ListPage: React.FC = () => {
     setLoader(true);
     const newNode = { value: inputValue.value, state: ElementStates.Default };
     linkedList.append(newNode);
+    setBottomCircle(true);
     setInputValue({ value: '', index: 0 });
     await setDelay(SHORT_DELAY_IN_MS);
-    // @ts-ignore
+    setBottomCircle(false);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
@@ -60,8 +64,9 @@ export const ListPage: React.FC = () => {
   const removeFromHead = async () => {
     setLoader(true);
     linkedList.removeHead();
+    setTopCircle(true);
     await setDelay(SHORT_DELAY_IN_MS);
-    // @ts-ignore
+    setTopCircle(false);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
@@ -69,9 +74,9 @@ export const ListPage: React.FC = () => {
   const removeFromTail = async () => {
     setLoader(true);
     linkedList.removeTail();
-
+    setBottomCircle(true);
     await setDelay(SHORT_DELAY_IN_MS);
-    // @ts-ignore
+    setBottomCircle(false);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
@@ -88,7 +93,6 @@ export const ListPage: React.FC = () => {
     linkedList.addAtIndex(newNode, newNode.index);
     setInputValue({ value: '', index: 0 });
     await setDelay(SHORT_DELAY_IN_MS);
-    // @ts-ignore 
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
@@ -99,13 +103,11 @@ export const ListPage: React.FC = () => {
       throw new Error('Index is bigger then list size. Enter valid index')
     }
     linkedList.removeAtIndex(inputValue.index);
-
     await setDelay(SHORT_DELAY_IN_MS);
-    // @ts-ignore 
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
-
+  console.log(linkedListSize)
   return (
     <SolutionLayout title="Связный список">
       <form className={s.container} >
@@ -134,8 +136,17 @@ export const ListPage: React.FC = () => {
         {list.map((el, index) => {
           return (
             <li key={index} className={s.li} >
-              {/* @ts-ignore */}
-              <Circle letter={el.value.value} index={index} />
+              <div className={s.circles} >
+                {topCircle && index === 0 &&
+                  <Circle letter={'head'} isSmall={true} state={ElementStates.Changing} extraClass={s.topCircle}
+                  />
+                }
+                <Circle letter={el.value.value} index={index} />
+                {bottomCircle && index === list.length - 1 &&
+                  <Circle letter={'tail'} isSmall={true} state={ElementStates.Changing} extraClass={s.bottomCircle}
+                  />
+                }
+              </div>
               {index !== list.length - 1 &&
                 <ArrowIcon />
               }

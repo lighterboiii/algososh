@@ -43,3 +43,21 @@
   align-items: center;
   gap: 21px;
 }
+
+.circles {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.topCircle {
+  position: absolute;
+  top: -64px;
+  left: 12px;
+}
+
+.bottomCircle {
+  position: absolute;
+  top: 112px;
+  left: 12px;
+}
