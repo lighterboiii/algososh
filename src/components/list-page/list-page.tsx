@@ -13,11 +13,10 @@ import { ElementStates } from "../../types/element-states";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 export const ListPage: React.FC = () => {
-
+  const linkedListSize = linkedList.getSize();
   const [loader, setLoader] = useState(false);
   const [inputValue, setInputValue] = useState({ value: '', index: 0 });
   const [list, setList] = useState<IArray[]>([]);
-  const [index, setIndex] = useState(-1);
 
   useEffect(() => {
     setLinkedList();
@@ -34,7 +33,7 @@ console.log(list)
     setLoader(true);
     const newNode = { value: inputValue.value, state: ElementStates.Default };
     linkedList.prepend(newNode);
-    console.log(newNode)
+    setInputValue({ value: '', index: 0 });
     await setDelay(SHORT_DELAY_IN_MS);
     // @ts-ignore
     setList([...linkedList.toArray()]);
@@ -45,6 +44,7 @@ console.log(list)
     setLoader(true);
     const newNode = { value: inputValue.value, state: ElementStates.Default };
     linkedList.append(newNode);
+    setInputValue({ value: '', index: 0 });
     await setDelay(SHORT_DELAY_IN_MS);
     // @ts-ignore
     setList([...linkedList.toArray()]);
@@ -70,6 +70,33 @@ console.log(list)
     setLoader(false);
   };
 
+  const insertAt = async () => {
+    setLoader(true);
+    const newNode = { value: inputValue.value, index: inputValue.index , state: ElementStates.Default };
+    if (newNode.index > linkedListSize) {
+      throw new Error('Index is bigger then list size. Enter valid index')
+    }
+    linkedList.addAtIndex(newNode, newNode.index);
+    setInputValue({ value: '', index: 0 });
+    await setDelay(SHORT_DELAY_IN_MS);
+    // @ts-ignore 
+    setList([...linkedList.toArray()]);
+    setLoader(false);
+  };
+
+  const deleteAt = async () => {
+    setLoader(true);
+    if (inputValue.index > linkedListSize) {
+      throw new Error('Index is bigger then list size. Enter valid index')
+    }
+    linkedList.removeAtIndex(inputValue.index);
+
+    await setDelay(SHORT_DELAY_IN_MS);
+    // @ts-ignore 
+    setList([...linkedList.toArray()]);
+    setLoader(false);
+  };
+
   return (
     <SolutionLayout title="Связный список">
       <form className={s.container} >
@@ -78,6 +105,7 @@ console.log(list)
           extraClass={s.input} 
           type='text' 
           name="value" 
+          value={inputValue.value}
           placeholder="Введите значение" 
           isLimitText={true} 
           maxLength={4} 
@@ -87,10 +115,10 @@ console.log(list)
           <Button text="Удалить из head" type="button" extraClass={s.smallButton} onClick={removeFromHead} isLoader={loader} />
           <Button text="Удалить из tail" type="button" extraClass={s.smallButton} onClick={removeFromTail} isLoader={loader} />
         </fieldset>
-        <fieldset className={s.layout} name='index'>
-          <Input extraClass={s.input} type='text' name="list" placeholder="Введите индекс" />
-          <Button text="Добавить по индексу" type="submit" extraClass={s.button} />
-          <Button text="Добавить удалить по индексу" type="submit" extraClass={s.button} />
+        <fieldset className={s.layout} name='atIndex'>
+          <Input extraClass={s.input} type='text' name="index" value={inputValue.index} placeholder="Введите индекс" onChange={handleChange} />
+          <Button text="Добавить по индексу" type="button" extraClass={s.button} onClick={insertAt} />
+          <Button text="Удалить по индексу" type="button" extraClass={s.button} onClick={deleteAt} />
         </fieldset>
       </form>
       <ul className={s.ul}>
