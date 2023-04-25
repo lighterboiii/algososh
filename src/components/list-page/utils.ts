@@ -1,10 +1,5 @@
 import { ElementStates } from "../../types/element-states";
-
-
-export interface IArray {
-  value: string;
-  state: ElementStates;
-}
+import { linkedList } from "./LinkedList";
 
 export const generateArray = () => {
   const size = Math.floor(Math.random() * (6 - 2)) + 2;
@@ -12,8 +7,16 @@ export const generateArray = () => {
 
   for (let i = 0; i < size; i++) {
     const randomNumber = Math.floor(Math.random() * (100 - 0)) + 0;
-    array.push({ value: randomNumber.toString(), state: ElementStates.Default });
+    array.push(randomNumber);
   }
 
   return array;
+};
+
+export const setLinkedList = () => {
+  const array = generateArray().map(el => String(el));
+  console.log(array)
+  return array.forEach(el => {
+    linkedList.append({ value: el, state: ElementStates.Default })
+  })
 };

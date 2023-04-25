@@ -4,7 +4,7 @@ import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
 import s from './sorting-page.module.css';
 import { Direction } from "../../types/direction";
-import { randomArr, ISort, sort } from "./algorithm";
+import { randomArr, ISort, sort } from "./utils";
 import { Column } from "../ui/column/column";
 import { ElementStates } from "../../types/element-states";
 import { setDelay } from "../../constants/setDelay";
