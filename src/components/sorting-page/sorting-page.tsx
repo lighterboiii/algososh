@@ -13,7 +13,11 @@ import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 export const SortingPage: React.FC = () => {
   const [array, setArray] = useState<Array<ISort>>([]);
   const [radio, setRadio] = useState('selectionSort');
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState({
+    asc: false,
+    desc: false,
+    loader: false
+  });
 
   const generateArray = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -26,7 +30,11 @@ export const SortingPage: React.FC = () => {
   };
 
   const selectionSort = async (array: Array<ISort>, direction: Direction) => {
-    setLoader(true);
+    if (direction === Direction.Ascending) {
+      setLoader({ ...loader, loader: true, asc: true });
+    } else {
+      setLoader({ ...loader, loader: true, desc: true });
+    }
     const length = array.length;
     for (let i = 0; i <= length - 1; i++) {
       let minIndex = i;
@@ -52,11 +60,15 @@ export const SortingPage: React.FC = () => {
       array[i].state = ElementStates.Modified;
       setArray([...array]);
     }
-    setLoader(false);
+    setLoader({ asc: false, desc: false, loader: false });
   };
 
   const bubbleSort = async (array: Array<ISort>, direction: Direction) => {
-    setLoader(true);
+    if (direction === Direction.Ascending) {
+      setLoader({ ...loader, loader: true, asc: true });
+    } else {
+      setLoader({ ...loader, loader: true, desc: true });
+    }
     const length = array.length;
     for (let i = 0; i <= length - 1; i++) {
       for (let j = 0; j < length - i - 1; j++) {
@@ -74,7 +86,7 @@ export const SortingPage: React.FC = () => {
       array[array.length - i - 1].state = ElementStates.Modified;
       setArray([...array]);
     }
-    setLoader(false);
+    setLoader({ asc: false, desc: false, loader: false });
   }; 
 
   const handleSort = (direction: Direction) => {
@@ -90,8 +102,8 @@ export const SortingPage: React.FC = () => {
     <SolutionLayout title="Сортировка массива">
       <form className={s.layout} >
         <fieldset name='radios' className={`${s.fieldset} + ${s.radios}`} >
-          <RadioInput label="Выбор" value='selectionSort' onChange={handleChange} checked={radio === 'selectionSort'} />
-          <RadioInput label="Пузырёк" value='bubbleSort' onChange={handleChange} checked={radio === 'bubbleSort'} />
+          <RadioInput disabled={loader.loader} label="Выбор" value='selectionSort' onChange={handleChange} checked={radio === 'selectionSort'} />
+          <RadioInput disabled={loader.loader} label="Пузырёк" value='bubbleSort' onChange={handleChange} checked={radio === 'bubbleSort'} />
         </fieldset>
         <fieldset name='buttons' className={`${s.fieldset} + ${s.buttons}`} >
           <Button
@@ -99,14 +111,16 @@ export const SortingPage: React.FC = () => {
             extraClass={s.button}
             sorting={Direction.Ascending}
             onClick={() => handleSort(Direction.Ascending)}
-            isLoader={loader}
+            isLoader={loader.asc}
+            disabled={loader.desc}
           />
           <Button
             text="По убыванию"
             extraClass={s.button}
             sorting={Direction.Descending}
             onClick={() => handleSort(Direction.Descending)}
-            isLoader={loader}
+            isLoader={loader.desc}
+            disabled={loader.asc}
           />
         </fieldset>
         <Button
@@ -114,7 +128,7 @@ export const SortingPage: React.FC = () => {
           type="submit"
           onClick={generateArray}
           extraClass={s.button}
-          isLoader={loader}
+          disabled={loader.loader}
         />
       </form>
       <ul className={s.ul}>
