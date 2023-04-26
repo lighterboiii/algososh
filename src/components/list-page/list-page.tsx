@@ -15,7 +15,15 @@ import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 export const ListPage: React.FC = () => {
   const linkedListSize = linkedList.getSize();
 
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState({
+    addHead: false,
+    addTail: false,
+    addAt: false,
+    deleteAt: false,
+    deleteTail: false,
+    deleteHead: false,
+    disabled: false
+  });
   const [inputValue, setInputValue] = useState({ value: '', index: '' });
   const [list, setList] = useState<IListNode<IArray>[]>([]);
   const [currIndex, setCurrIndex] = useState(-1);
@@ -23,7 +31,7 @@ export const ListPage: React.FC = () => {
   const [currElement, setCurrElement] = useState('');
   const [changingIndex, setChangingIndex] = useState(-1);
   const [modIndex, setModIndex] = useState(-1);
-  const pok = linkedList.getLastNode();
+  const pok = linkedList.getNodeAtIndex(Number(inputValue.index));
   console.log(pok)
   useEffect(() => {
     setLinkedList();
@@ -36,7 +44,7 @@ export const ListPage: React.FC = () => {
   };
 
   const addToHead = async () => {
-    setLoader(true);
+    setLoader({ ...loader, addHead: true, disabled: true });
     const newNode = { value: inputValue.value, state: ElementStates.Default };
     linkedList.prepend(newNode);
     setCurrIndex(0);
@@ -52,11 +60,11 @@ export const ListPage: React.FC = () => {
     await setDelay(SHORT_DELAY_IN_MS);
     setModIndex(-1);
     setList([...linkedList.toArray()]);
-    setLoader(false);
+    setLoader({ ...loader, addHead: false, disabled: false });
   };
 
   const addToTail = async () => {
-    setLoader(true);
+    setLoader({ ...loader, addTail: true, disabled: true });
     const newNode = { value: inputValue.value, state: ElementStates.Default };
     linkedList.append(newNode);
     setCurrIndex(linkedListSize - 1);
@@ -70,11 +78,11 @@ export const ListPage: React.FC = () => {
     await setDelay(SHORT_DELAY_IN_MS);
     setModIndex(-1);
     setList([...linkedList.toArray()]);
-    setLoader(false);
+    setLoader({ ...loader, addTail: false, disabled: false });
   };
 
   const removeFromHead = async () => {
-    setLoader(true);
+    setLoader({ ...loader, deleteHead: true, disabled: true });
     setCurrElement(list[0].value.value);
     linkedList.getFirstNode()!.value.value = '';
     linkedList.removeHead();
@@ -85,11 +93,11 @@ export const ListPage: React.FC = () => {
     setIsTopCircle(false);
     setCurrElement('');
     setList([...linkedList.toArray()]);
-    setLoader(false);
+    setLoader({ ...loader, deleteHead: false, disabled: false });
   };
- 
+
   const removeFromTail = async () => {
-    setLoader(true);
+    setLoader({ ...loader, deleteTail: true, disabled: true });
     setCurrElement(list[list.length - 1].value.value);
     linkedList.getLastNode()!.value.value = '';
     linkedList.removeTail();
@@ -97,11 +105,11 @@ export const ListPage: React.FC = () => {
     await setDelay(SHORT_DELAY_IN_MS);
     setCurrIndex(-1);
     setList([...linkedList.toArray()]);
-    setLoader(false);
+    setLoader({ ...loader, deleteTail: false, disabled: false});
   };
 
   const insertAt = async () => {
-    setLoader(true);
+    setLoader({ ...loader, addAt: true, disabled: true });
     setIsTopCircle(true);
     setCurrElement(inputValue.value);
     let start = 0;
@@ -125,11 +133,11 @@ export const ListPage: React.FC = () => {
     setModIndex(-1);
     setList([...linkedList.toArray()]);
     setIsTopCircle(false);
-    setLoader(false);
+    setLoader({ ...loader, addAt: false, disabled: false });
   };
 
   const deleteAt = async () => {
-    setLoader(true);
+    setLoader({ ...loader, deleteAt: true, disabled: true });
     let start = 0;
     while (start <= Number(inputValue.index)) {
       setChangingIndex(start);
@@ -138,13 +146,14 @@ export const ListPage: React.FC = () => {
     }
     setCurrIndex(Number(inputValue.index));
     setCurrElement(list[Number(inputValue.index)].value.value);
+    linkedList.getNodeAtIndex(Number(inputValue.index))!.value.value = '';
     linkedList.removeAtIndex(Number(inputValue.index));
     setInputValue({ value: '', index: '' });
     await setDelay(SHORT_DELAY_IN_MS);
     setChangingIndex(-1);
     setCurrIndex(-1);
     setList([...linkedList.toArray()]);
-    setLoader(false);
+    setLoader({ ...loader, deleteAt: false, disabled: false });
   };
 
   const showHead = (index: number) => {
@@ -182,31 +191,31 @@ export const ListPage: React.FC = () => {
             type="button"
             extraClass={s.smallButton}
             onClick={addToHead}
-            isLoader={loader}
-            disabled={!inputValue.value}
+            isLoader={loader.addHead}
+            disabled={!inputValue.value || loader.disabled}
           />
           <Button
             text="Добавить в tail"
             type="button"
             extraClass={s.smallButton}
             onClick={addToTail}
-            isLoader={loader}
-            disabled={!inputValue.value}
+            isLoader={loader.addTail}
+            disabled={!inputValue.value || loader.disabled}
           />
           <Button
             text="Удалить из head" type="button"
             extraClass={s.smallButton}
             onClick={removeFromHead}
-            isLoader={loader}
-            disabled={list.length === 0}
+            isLoader={loader.deleteHead}
+            disabled={list.length === 0 || loader.disabled}
           />
           <Button
             text="Удалить из tail"
             type="button"
             extraClass={s.smallButton}
             onClick={removeFromTail}
-            isLoader={loader}
-            disabled={list.length === 0}
+            isLoader={loader.deleteTail}
+            disabled={list.length === 0 || loader.disabled}
           />
         </fieldset>
         <fieldset className={s.layout} name='atIndex'>
@@ -216,14 +225,16 @@ export const ListPage: React.FC = () => {
             type="button"
             extraClass={s.button}
             onClick={insertAt}
-            disabled={!inputValue.value}
+            disabled={!inputValue.value || loader.disabled}
+            isLoader={loader.addAt}
           />
           <Button
             text="Удалить по индексу"
             type="button"
             extraClass={s.button}
             onClick={deleteAt}
-            disabled={!inputValue.index}
+            disabled={!inputValue.index || loader.disabled }
+            isLoader={loader.deleteAt}
           />
         </fieldset>
       </form>
