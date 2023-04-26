@@ -14,11 +14,13 @@ import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 export const ListPage: React.FC = () => {
   const linkedListSize = linkedList.getSize();
+
   const [loader, setLoader] = useState(false);
-  const [inputValue, setInputValue] = useState({ value: '', index: 0 });
+  const [inputValue, setInputValue] = useState({ value: '', index: '' });
   const [list, setList] = useState<IListNode<IArray>[]>([]);
-  const [topCircle, setTopCircle] = useState(false);
-  const [bottomCircle, setBottomCircle] = useState(false);
+  const [currIndex, setCurrIndex] = useState(-1);
+  const [isTopCircle, setIsTopCircle] = useState(false);
+  const [currElement, setCurrElement] = useState('');
   const [changingIndex, setChangingIndex] = useState(-1);
 
   useEffect(() => {
@@ -32,31 +34,29 @@ export const ListPage: React.FC = () => {
   };
 
   const addToHead = async () => {
-    if (!inputValue.value || inputValue.value.trim() === '') {
-      throw new Error('Enter a value');
-    }
     setLoader(true);
     const newNode = { value: inputValue.value, state: ElementStates.Default };
     linkedList.prepend(newNode);
-    setTopCircle(true);
-    setInputValue({ value: '', index: 0 });
+    setCurrIndex(0);
+    setIsTopCircle(true);
+    setCurrElement(inputValue.value);
     await setDelay(SHORT_DELAY_IN_MS);
-    setTopCircle(false);
+    setIsTopCircle(false);
+    setInputValue({ value: '', index: '0' });
+    setCurrIndex(-1);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
 
   const addToTail = async () => {
-    if (!inputValue.value || inputValue.value.trim() === '') {
-      throw new Error('Enter a value');
-    }
     setLoader(true);
     const newNode = { value: inputValue.value, state: ElementStates.Default };
     linkedList.append(newNode);
-    setBottomCircle(true);
-    setInputValue({ value: '', index: 0 });
+    setCurrIndex(linkedListSize - 1);
+    setCurrElement(inputValue.value);
     await setDelay(SHORT_DELAY_IN_MS);
-    setBottomCircle(false);
+    setInputValue({ value: '', index: '0' });
+    setCurrIndex(-1);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
@@ -64,9 +64,12 @@ export const ListPage: React.FC = () => {
   const removeFromHead = async () => {
     setLoader(true);
     linkedList.removeHead();
-    setTopCircle(true);
+    setCurrIndex(0);
+    setIsTopCircle(true);
+    // добавить setCurrElement 
     await setDelay(SHORT_DELAY_IN_MS);
-    setTopCircle(false);
+    setCurrIndex(-1);
+    setIsTopCircle(false);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
@@ -74,40 +77,54 @@ export const ListPage: React.FC = () => {
   const removeFromTail = async () => {
     setLoader(true);
     linkedList.removeTail();
-    setBottomCircle(true);
+    // добавить setCurrElement 
+    setCurrIndex(linkedListSize - 1);
     await setDelay(SHORT_DELAY_IN_MS);
-    setBottomCircle(false);
+    setCurrIndex(-1);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
 
   const insertAt = async () => {
-    if (!inputValue.value || inputValue.value.trim() === '') {
-      throw new Error('Enter a value');
-    }
+
     setLoader(true);
     const newNode = { value: inputValue.value, index: inputValue.index, state: ElementStates.Default };
-    if (newNode.index > linkedListSize) {
-      throw new Error('Index is bigger then list size. Enter valid index')
-    }
-    linkedList.addAtIndex(newNode, newNode.index);
-    setInputValue({ value: '', index: 0 });
+
+    linkedList.addAtIndex(newNode, Number(newNode.index));
+
+    setInputValue({ value: '', index: '0' });
     await setDelay(SHORT_DELAY_IN_MS);
+
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
 
   const deleteAt = async () => {
     setLoader(true);
-    if (inputValue.index > linkedListSize) {
-      throw new Error('Index is bigger then list size. Enter valid index')
-    }
-    linkedList.removeAtIndex(inputValue.index);
+
+    linkedList.removeAtIndex(Number(inputValue.index));
     await setDelay(SHORT_DELAY_IN_MS);
+
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
-  console.log(linkedListSize)
+
+  const showHead = (index: number) => {
+    return currIndex === index && isTopCircle === true
+      ? (<Circle isSmall={true} letter={currElement} state={ElementStates.Changing} />)
+      : index === 0
+        ? ('head')
+        : undefined;
+  };
+
+  const showTail = (index: number) => {
+    return currIndex === index && isTopCircle === false
+    ? (<Circle isSmall={true} letter={currElement} state={ElementStates.Changing} />)
+    : index === list.length - 1
+      ? ('tail')
+      : undefined;
+  }
+
   return (
     <SolutionLayout title="Связный список">
       <form className={s.container} >
@@ -120,16 +137,54 @@ export const ListPage: React.FC = () => {
             placeholder="Введите значение"
             isLimitText={true}
             maxLength={4}
-            onChange={handleChange} />
-          <Button text="Добавить в head" type="button" extraClass={s.smallButton} onClick={addToHead} isLoader={loader} />
-          <Button text="Добавить в tail" type="button" extraClass={s.smallButton} onClick={addToTail} isLoader={loader} />
-          <Button text="Удалить из head" type="button" extraClass={s.smallButton} onClick={removeFromHead} isLoader={loader} />
-          <Button text="Удалить из tail" type="button" extraClass={s.smallButton} onClick={removeFromTail} isLoader={loader} />
+            onChange={handleChange}
+          />
+          <Button
+            text="Добавить в head"
+            type="button"
+            extraClass={s.smallButton}
+            onClick={addToHead}
+            isLoader={loader}
+            disabled={!inputValue.value}
+          />
+          <Button
+            text="Добавить в tail"
+            type="button"
+            extraClass={s.smallButton}
+            onClick={addToTail}
+            isLoader={loader}
+            disabled={!inputValue.value}
+          />
+          <Button
+            text="Удалить из head" type="button"
+            extraClass={s.smallButton}
+            onClick={removeFromHead}
+            isLoader={loader}
+          />
+          <Button
+            text="Удалить из tail"
+            type="button"
+            extraClass={s.smallButton}
+            onClick={removeFromTail}
+            isLoader={loader}
+          />
         </fieldset>
         <fieldset className={s.layout} name='atIndex'>
           <Input extraClass={s.input} type='text' name="index" value={inputValue.index} placeholder="Введите индекс" onChange={handleChange} />
-          <Button text="Добавить по индексу" type="button" extraClass={s.button} onClick={insertAt} />
-          <Button text="Удалить по индексу" type="button" extraClass={s.button} onClick={deleteAt} />
+          <Button
+            text="Добавить по индексу"
+            type="button"
+            extraClass={s.button}
+            onClick={insertAt}
+            disabled={!inputValue.value}
+          />
+          <Button
+            text="Удалить по индексу"
+            type="button"
+            extraClass={s.button}
+            onClick={deleteAt}
+            disabled={!inputValue.value}
+          />
         </fieldset>
       </form>
       <ul className={s.ul}>
@@ -137,15 +192,7 @@ export const ListPage: React.FC = () => {
           return (
             <li key={index} className={s.li} >
               <div className={s.circles} >
-                {topCircle && index === 0 &&
-                  <Circle letter={'head'} isSmall={true} state={ElementStates.Changing} extraClass={s.topCircle}
-                  />
-                }
-                <Circle letter={el.value.value} index={index} />
-                {bottomCircle && index === list.length - 1 &&
-                  <Circle letter={'tail'} isSmall={true} state={ElementStates.Changing} extraClass={s.bottomCircle}
-                  />
-                }
+                <Circle letter={el.value.value} index={index} head={showHead(index)} tail={showTail(index)} />
               </div>
               {index !== list.length - 1 &&
                 <ArrowIcon />
