@@ -22,7 +22,7 @@ export const ListPage: React.FC = () => {
   const [isTopCircle, setIsTopCircle] = useState(false);
   const [currElement, setCurrElement] = useState('');
   const [changingIndex, setChangingIndex] = useState(-1);
-  const [state, currentState] = useState(ElementStates.Default);
+  const [modIndex, setModIndex] = useState(-1);
 
   useEffect(() => {
     setLinkedList();
@@ -44,8 +44,12 @@ export const ListPage: React.FC = () => {
     await setDelay(SHORT_DELAY_IN_MS);
     setCurrElement('');
     setIsTopCircle(false);
-    setInputValue({ value: '', index: '0' });
+    setInputValue({ value: '', index: '' });
     setCurrIndex(-1);
+    setList([...linkedList.toArray()]);
+    setModIndex(0);
+    await setDelay(SHORT_DELAY_IN_MS);
+    setModIndex(-1);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
@@ -58,8 +62,12 @@ export const ListPage: React.FC = () => {
     setCurrElement(inputValue.value);
     await setDelay(SHORT_DELAY_IN_MS);
     setCurrElement('');
-    setInputValue({ value: '', index: '0' });
+    setInputValue({ value: '', index: '' });
     setCurrIndex(-1);
+    setList([...linkedList.toArray()]);
+    setModIndex(linkedListSize);
+    await setDelay(SHORT_DELAY_IN_MS);
+    setModIndex(-1);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
@@ -69,18 +77,19 @@ export const ListPage: React.FC = () => {
     linkedList.removeHead();
     setCurrIndex(0);
     setIsTopCircle(true);
-    // добавить setCurrElement 
+    setCurrElement(list[0].value.value);
     await setDelay(SHORT_DELAY_IN_MS);
     setCurrIndex(-1);
     setIsTopCircle(false);
+    setCurrElement('');
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
-
+// добавить очищение значения элемента списка при удалении
   const removeFromTail = async () => {
     setLoader(true);
     linkedList.removeTail();
-    // добавить setCurrElement 
+    setCurrElement(list[list.length - 1].value.value)
     setCurrIndex(linkedListSize - 1);
     await setDelay(SHORT_DELAY_IN_MS);
     setCurrIndex(-1);
@@ -90,24 +99,30 @@ export const ListPage: React.FC = () => {
 
   const insertAt = async () => {
     setLoader(true);
+    setIsTopCircle(true);
+    setCurrElement(inputValue.value);
     let start = 0;
     while (start <= Number(inputValue.index)) {
       setChangingIndex(start);
+      setCurrIndex(start);
       await setDelay(SHORT_DELAY_IN_MS);
       start++;
     }
     setCurrIndex(Number(inputValue.index));
-    setCurrElement(inputValue.value);
     setIsTopCircle(true);
     const newNode = { value: inputValue.value, index: inputValue.index, state: ElementStates.Default };
     linkedList.addAtIndex(newNode, Number(newNode.index));
-    setInputValue({ value: '', index: '0' });
+    setInputValue({ value: '', index: '' });
     await setDelay(SHORT_DELAY_IN_MS);
     setCurrIndex(-1);
     setCurrElement('');
     setChangingIndex(-1);
-    setIsTopCircle(false);
     setList([...linkedList.toArray()]);
+    setModIndex(Number(inputValue.index));
+    await setDelay(SHORT_DELAY_IN_MS);
+    setModIndex(-1);
+    setList([...linkedList.toArray()]);
+    setIsTopCircle(false);
     setLoader(false);
   };
 
@@ -120,7 +135,9 @@ export const ListPage: React.FC = () => {
       start++;
     }
     setCurrIndex(Number(inputValue.index));
+    setCurrElement(list[Number(inputValue.index)].value.value);
     linkedList.removeAtIndex(Number(inputValue.index));
+    setInputValue({ value: '', index: '' });
     await setDelay(SHORT_DELAY_IN_MS);
     setChangingIndex(-1);
     setCurrIndex(-1);
@@ -146,7 +163,7 @@ export const ListPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Связный список">
-      <form className={s.container} >
+      <form className={s.container} onSubmit={e => e.preventDefault()} >
         <fieldset className={s.layout} name='tailhead' >
           <Input
             extraClass={s.input}
@@ -218,7 +235,7 @@ export const ListPage: React.FC = () => {
                   index={index}
                   head={showHead(index)}
                   tail={showTail(index)}
-                  state={index === changingIndex ? ElementStates.Changing : ElementStates.Default} />
+                  state={index === changingIndex ? ElementStates.Changing : index === modIndex ? ElementStates.Modified : ElementStates.Default} />
               </div>
               {index !== list.length - 1 &&
                 <ArrowIcon />
