@@ -32,6 +32,8 @@ interface ILinkedList<T> {
 
   toArray: () => IListNode<T>[];
   getSize: () => number;
+  getLastNode: () => IListNode<T> | null;
+  getFirstNode: () => IListNode<T> | null;
 }
 
 class LinkedList<T> implements ILinkedList<T> {
@@ -126,14 +128,14 @@ class LinkedList<T> implements ILinkedList<T> {
       return;
     }
 
-    let cur = this.head;
-    for (let i = 0; i < index - 1 && cur !== null; ++i) {
-      if (cur.next) cur = cur.next;
+    let curr = this.head;
+    for (let i = 0; i < index - 1 && curr !== null; ++i) {
+      if (curr.next) curr = curr.next;
     }
-    if (cur === null || cur.next === null) {
+    if (curr === null || curr.next === null) {
       return;
     }
-    cur.next = cur.next.next;
+    curr.next = curr.next.next;
     this.size--;
   }
 
@@ -149,6 +151,24 @@ class LinkedList<T> implements ILinkedList<T> {
 
   getSize(): number {
     return this.size;
+  }
+
+  getLastNode() {
+    if (!this.head) {
+      return null;
+    }
+    let node = this.head;
+    while (node.next) {
+      node = node.next;
+    }
+    return node;
+  }
+
+  getFirstNode() {
+    if (!this.head) {
+      return null;
+    }
+    return this.head;
   }
 }
 

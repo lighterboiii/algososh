@@ -23,7 +23,8 @@ export const ListPage: React.FC = () => {
   const [currElement, setCurrElement] = useState('');
   const [changingIndex, setChangingIndex] = useState(-1);
   const [modIndex, setModIndex] = useState(-1);
-
+  const pok = linkedList.getLastNode();
+  console.log(pok)
   useEffect(() => {
     setLinkedList();
     setList(linkedList.toArray());
@@ -74,10 +75,11 @@ export const ListPage: React.FC = () => {
 
   const removeFromHead = async () => {
     setLoader(true);
+    setCurrElement(list[0].value.value);
+    linkedList.getFirstNode()!.value.value = '';
     linkedList.removeHead();
     setCurrIndex(0);
     setIsTopCircle(true);
-    setCurrElement(list[0].value.value);
     await setDelay(SHORT_DELAY_IN_MS);
     setCurrIndex(-1);
     setIsTopCircle(false);
@@ -85,11 +87,12 @@ export const ListPage: React.FC = () => {
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
-// добавить очищение значения элемента списка при удалении
+ 
   const removeFromTail = async () => {
     setLoader(true);
+    setCurrElement(list[list.length - 1].value.value);
+    linkedList.getLastNode()!.value.value = '';
     linkedList.removeTail();
-    setCurrElement(list[list.length - 1].value.value)
     setCurrIndex(linkedListSize - 1);
     await setDelay(SHORT_DELAY_IN_MS);
     setCurrIndex(-1);
@@ -109,7 +112,6 @@ export const ListPage: React.FC = () => {
       start++;
     }
     setCurrIndex(Number(inputValue.index));
-    setIsTopCircle(true);
     const newNode = { value: inputValue.value, index: inputValue.index, state: ElementStates.Default };
     linkedList.addAtIndex(newNode, Number(newNode.index));
     setInputValue({ value: '', index: '' });
@@ -235,7 +237,11 @@ export const ListPage: React.FC = () => {
                   index={index}
                   head={showHead(index)}
                   tail={showTail(index)}
-                  state={index === changingIndex ? ElementStates.Changing : index === modIndex ? ElementStates.Modified : ElementStates.Default} />
+                  state={index === changingIndex
+                    ? ElementStates.Changing
+                    : index === modIndex
+                      ? ElementStates.Modified
+                      : ElementStates.Default} />
               </div>
               {index !== list.length - 1 &&
                 <ArrowIcon />
