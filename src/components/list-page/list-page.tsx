@@ -22,6 +22,7 @@ export const ListPage: React.FC = () => {
   const [isTopCircle, setIsTopCircle] = useState(false);
   const [currElement, setCurrElement] = useState('');
   const [changingIndex, setChangingIndex] = useState(-1);
+  const [state, currentState] = useState(ElementStates.Default);
 
   useEffect(() => {
     setLinkedList();
@@ -41,6 +42,7 @@ export const ListPage: React.FC = () => {
     setIsTopCircle(true);
     setCurrElement(inputValue.value);
     await setDelay(SHORT_DELAY_IN_MS);
+    setCurrElement('');
     setIsTopCircle(false);
     setInputValue({ value: '', index: '0' });
     setCurrIndex(-1);
@@ -55,6 +57,7 @@ export const ListPage: React.FC = () => {
     setCurrIndex(linkedListSize - 1);
     setCurrElement(inputValue.value);
     await setDelay(SHORT_DELAY_IN_MS);
+    setCurrElement('');
     setInputValue({ value: '', index: '0' });
     setCurrIndex(-1);
     setList([...linkedList.toArray()]);
@@ -86,25 +89,41 @@ export const ListPage: React.FC = () => {
   };
 
   const insertAt = async () => {
-
     setLoader(true);
+    let start = 0;
+    while (start <= Number(inputValue.index)) {
+      setChangingIndex(start);
+      await setDelay(SHORT_DELAY_IN_MS);
+      start++;
+    }
+    setCurrIndex(Number(inputValue.index));
+    setCurrElement(inputValue.value);
+    setIsTopCircle(true);
     const newNode = { value: inputValue.value, index: inputValue.index, state: ElementStates.Default };
-
     linkedList.addAtIndex(newNode, Number(newNode.index));
-
     setInputValue({ value: '', index: '0' });
     await setDelay(SHORT_DELAY_IN_MS);
-
+    setCurrIndex(-1);
+    setCurrElement('');
+    setChangingIndex(-1);
+    setIsTopCircle(false);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
 
   const deleteAt = async () => {
     setLoader(true);
-
+    let start = 0;
+    while (start <= Number(inputValue.index)) {
+      setChangingIndex(start);
+      await setDelay(SHORT_DELAY_IN_MS);
+      start++;
+    }
+    setCurrIndex(Number(inputValue.index));
     linkedList.removeAtIndex(Number(inputValue.index));
     await setDelay(SHORT_DELAY_IN_MS);
-
+    setChangingIndex(-1);
+    setCurrIndex(-1);
     setList([...linkedList.toArray()]);
     setLoader(false);
   };
@@ -119,10 +138,10 @@ export const ListPage: React.FC = () => {
 
   const showTail = (index: number) => {
     return currIndex === index && isTopCircle === false
-    ? (<Circle isSmall={true} letter={currElement} state={ElementStates.Changing} />)
-    : index === list.length - 1
-      ? ('tail')
-      : undefined;
+      ? (<Circle isSmall={true} letter={currElement} state={ElementStates.Changing} />)
+      : index === list.length - 1
+        ? ('tail')
+        : undefined;
   }
 
   return (
@@ -160,6 +179,7 @@ export const ListPage: React.FC = () => {
             extraClass={s.smallButton}
             onClick={removeFromHead}
             isLoader={loader}
+            disabled={list.length === 0}
           />
           <Button
             text="Удалить из tail"
@@ -167,6 +187,7 @@ export const ListPage: React.FC = () => {
             extraClass={s.smallButton}
             onClick={removeFromTail}
             isLoader={loader}
+            disabled={list.length === 0}
           />
         </fieldset>
         <fieldset className={s.layout} name='atIndex'>
@@ -183,7 +204,7 @@ export const ListPage: React.FC = () => {
             type="button"
             extraClass={s.button}
             onClick={deleteAt}
-            disabled={!inputValue.value}
+            disabled={!inputValue.index}
           />
         </fieldset>
       </form>
@@ -192,7 +213,12 @@ export const ListPage: React.FC = () => {
           return (
             <li key={index} className={s.li} >
               <div className={s.circles} >
-                <Circle letter={el.value.value} index={index} head={showHead(index)} tail={showTail(index)} />
+                <Circle
+                  letter={el.value.value}
+                  index={index}
+                  head={showHead(index)}
+                  tail={showTail(index)}
+                  state={index === changingIndex ? ElementStates.Changing : ElementStates.Default} />
               </div>
               {index !== list.length - 1 &&
                 <ArrowIcon />
