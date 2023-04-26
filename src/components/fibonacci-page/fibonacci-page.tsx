@@ -64,7 +64,7 @@ export const FibonacciPage: React.FC = () => {
         {fibonacci.current.slice(0, num).map((letter, index) => {
           return (
             <li key={index}>
-              <Circle letter={letter.toString()} />
+              <Circle letter={letter.toString()} index={index} />
             </li>
           )
         })}
