@@ -14,7 +14,6 @@ import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 export const ListPage: React.FC = () => {
   const linkedListSize = linkedList.getSize();
-
   const [loader, setLoader] = useState({
     addHead: false,
     addTail: false,
@@ -31,14 +30,12 @@ export const ListPage: React.FC = () => {
   const [currElement, setCurrElement] = useState('');
   const [changingIndex, setChangingIndex] = useState(-1);
   const [modIndex, setModIndex] = useState(-1);
-  const pok = linkedList.getNodeAtIndex(Number(inputValue.index));
-  console.log(pok)
+
   useEffect(() => {
     setLinkedList();
     setList(linkedList.toArray());
   }, []);
 
-  console.log(list)
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue({ ...inputValue, [e.target.name]: e.target.value });
   };

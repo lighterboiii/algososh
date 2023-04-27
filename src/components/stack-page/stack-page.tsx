@@ -10,12 +10,14 @@ import { setDelay } from "../../constants/setDelay";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 export const StackPage: React.FC = () => {
-
+  const ref = useRef(new Stack());
   const [value, setValue] = useState('');
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState({
+    add: false,
+    remove: false
+  });
   const [res, setRes] = useState<Array<string>>([]);
   const [topIndex, setTopIndex] = useState(-1);
-  const ref = useRef(new Stack());
 
   const showCircles = () => {
     const stack = ref.current.array();
@@ -23,31 +25,29 @@ export const StackPage: React.FC = () => {
   };
 
   const addElement = async () => {
-    setLoader(true);
+    setLoader({ ...loader, add: true });
     setValue('');
     ref.current.push(value);
     showCircles();
     setTopIndex(ref.current.index);
     await setDelay(SHORT_DELAY_IN_MS);
     setTopIndex(-1);
-    setLoader(false);
+    setLoader({ ...loader, add: false });
   };
 
-  const removeElement =  async () => {
-    setLoader(true);
+  const removeElement = async () => {
+    setLoader({ ...loader, remove: true });
     setTopIndex(ref.current.index);
     ref.current.pop();
     await setDelay(SHORT_DELAY_IN_MS);
     setTopIndex(-1);
-    setLoader(false);
+    setLoader({ ...loader, remove: false });
     showCircles();
   };
 
   const handleClear = async () => {
-    setLoader(true);
     setValue('');
     ref.current.clear();
-    setLoader(false);
     showCircles();
   };
 
@@ -60,20 +60,20 @@ export const StackPage: React.FC = () => {
             value={value}
             onChange={(e: any) => setValue(e.target.value)}
             isLimitText={true} />
-          <Button text='Добавить' type='submit' disabled={!value} onClick={addElement} isLoader={loader} />
-          <Button text='Удалить' type='button' disabled={res.length === 0} onClick={removeElement} isLoader={loader} />
+          <Button text='Добавить' type='submit' disabled={!value || loader.remove} onClick={addElement} isLoader={loader.add} />
+          <Button text='Удалить' type='button' disabled={res.length === 0 || loader.add} onClick={removeElement} isLoader={loader.remove} />
         </div>
-        <Button text='Очистить' type='reset' disabled={res.length === 0} onClick={handleClear} isLoader={loader} />
+        <Button text='Очистить' type='reset' disabled={res.length === 0 || loader.add || loader.remove} onClick={handleClear} />
       </form>
       <ul className={s.ul} >
         {res.map((el, index) => {
           return (
             <li key={index} >
-              <Circle 
-              index={index} 
-              letter={el} 
-              head={index === res!.length - 1 ? "top" : undefined} 
-              state={index === topIndex ? ElementStates.Changing : ElementStates.Default} />
+              <Circle
+                index={index}
+                letter={el}
+                head={index === res!.length - 1 ? "top" : undefined}
+                state={index === topIndex ? ElementStates.Changing : ElementStates.Default} />
             </li>
           )
         }

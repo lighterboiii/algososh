@@ -9,4 +9,4 @@ export const getFibonacciNumbers = (num: any) => {
   }
 
   return array;
-}
+};
