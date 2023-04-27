@@ -11,6 +11,7 @@ import { setDelay } from "../../constants/setDelay";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { ElementStates } from "../../types/element-states";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { HEAD, TAIL } from "../../constants/element-captions";
 
 export const ListPage: React.FC = () => {
   const linkedListSize = linkedList.getSize();
@@ -157,7 +158,7 @@ export const ListPage: React.FC = () => {
     return currIndex === index && isTopCircle === true
       ? (<Circle isSmall={true} letter={currElement} state={ElementStates.Changing} />)
       : index === 0
-        ? ('head')
+        ? (HEAD)
         : undefined;
   };
 
@@ -165,7 +166,7 @@ export const ListPage: React.FC = () => {
     return currIndex === index && isTopCircle === false
       ? (<Circle isSmall={true} letter={currElement} state={ElementStates.Changing} />)
       : index === list.length - 1
-        ? ('tail')
+        ? (TAIL)
         : undefined;
   }
 

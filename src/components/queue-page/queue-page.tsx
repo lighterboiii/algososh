@@ -15,7 +15,6 @@ export const QueuePage: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [queue, setQueue] = useState<Array<string>>([]);
   const [currIndex, setCurrIndex] = useState(-1);
-  console.log(queue);
   const [loader, setLoader] = useState({
     add: false,
     delete: false,
