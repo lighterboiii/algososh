@@ -19,7 +19,7 @@ export const QueuePage: React.FC = () => {
   const [loader, setLoader] = useState({
     add: false,
     delete: false,
-    loader: false
+    clear: false
   });
 
   useEffect(() => {
@@ -51,6 +51,14 @@ export const QueuePage: React.FC = () => {
     setLoader({ ...loader, delete: false });
   };
 
+  const clearQueue = async () => {
+    setLoader({ ...loader, clear: true });
+    await setDelay(SHORT_DELAY_IN_MS);
+    q.clear();
+    setQueue([...q.toArray().fill('')]);
+    setLoader({ ...loader, clear: false });
+  };
+
   const isHead = (index: number) => {
     return index === q.getHead() && !q.isEmpty() ? HEAD : '';
   };
@@ -61,9 +69,10 @@ export const QueuePage: React.FC = () => {
 
   return (
     <SolutionLayout title="Очередь">
-      <form className={s.form} onSubmit={e => e.preventDefault} >
+      <form className={s.form} onSubmit={e => e.preventDefault}>
         <fieldset className={s.fieldset} >
           <Input
+            disabled={q.isFull()}
             extraClass={s.input}
             value={inputValue}
             onChange={handleChange}
@@ -72,7 +81,7 @@ export const QueuePage: React.FC = () => {
           <Button text="Добавить" isLoader={loader.add} disabled={loader.delete || !inputValue} onClick={addItem} />
           <Button text="Удалить" isLoader={loader.delete} disabled={loader.add || q.isEmpty()} onClick={delItem} />
         </fieldset>
-        <Button text="Очистить" extraClass={s.formButton} />
+        <Button text="Очистить" extraClass={s.formButton} isLoader={loader.clear} disabled={q.isEmpty()} onClick={clearQueue} />
       </form>
       <ul className={s.ul}>
         {queue.map((item, index) => {

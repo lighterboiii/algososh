@@ -7,6 +7,8 @@ interface IQueue<T> {
   getSize: () => number;
   clear: () => void;
   toArray: () => T[] | null[];
+  isEmpty: () => void;
+  isFull: () => void;
 }
 
 export class Queue<T> implements IQueue<T> {
@@ -59,7 +61,9 @@ export class Queue<T> implements IQueue<T> {
   }
 
   clear() {
-    return this.length = 0;
+    this.length = 0;
+    this.head = 0;
+    this.tail = 0;
   }
 
   toArray() {
@@ -67,6 +71,10 @@ export class Queue<T> implements IQueue<T> {
   }
 
   isEmpty = () => this.length === 0;
+
+  isFull = () => {
+    return this.length >= this.size;
+  }
 };
 
 export const q = new Queue<string>(7);
