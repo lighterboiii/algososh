@@ -25,6 +25,13 @@ export const QueuePage: React.FC = () => {
     setQueue(q.toArray().fill(''));
   }, []);
 
+  // useEffect(() => {
+  //   if (q.isEmpty()) {
+  //     q.clear();
+  //     setQueue([...q.toArray().fill('')]);
+  //   }
+  // }, [q]);
+  // console.log(q);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
@@ -63,7 +70,7 @@ export const QueuePage: React.FC = () => {
   };
 
   const isTail = (index: number) => {
-    return index === q.getTail() && !q.isEmpty() ? TAIL : '';
+    return index === q.getLastIndex() && !q.isEmpty() ? TAIL : '';
   };
 
   return (
@@ -77,10 +84,10 @@ export const QueuePage: React.FC = () => {
             onChange={handleChange}
             maxLength={4}
             isLimitText={true} />
-          <Button text="Добавить" isLoader={loader.add} disabled={loader.delete || !inputValue} onClick={addItem} />
-          <Button text="Удалить" isLoader={loader.delete} disabled={loader.add || q.isEmpty()} onClick={delItem} />
+          <Button text="Добавить" type='button' isLoader={loader.add} disabled={loader.delete || !inputValue} onClick={addItem} />
+          <Button text="Удалить" type='button' isLoader={loader.delete} disabled={loader.add || q.isEmpty()} onClick={delItem} />
         </fieldset>
-        <Button text="Очистить" extraClass={s.formButton} isLoader={loader.clear} disabled={q.isEmpty()} onClick={clearQueue} />
+        <Button text="Очистить" type='button' extraClass={s.formButton} isLoader={loader.clear} disabled={q.isEmpty()} onClick={clearQueue} />
       </form>
       <ul className={s.ul}>
         {queue.map((item, index) => {

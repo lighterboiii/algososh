@@ -5,6 +5,7 @@ interface IQueue<T> {
   getHead: () => number;
   getTail: () => number;
   getSize: () => number;
+  getLastIndex: () => number;
   clear: () => void;
   toArray: () => T[] | null[];
   isEmpty: () => void;
@@ -15,6 +16,7 @@ export class Queue<T> implements IQueue<T> {
   private container: Array<T> = [];
   private head = 0;
   private tail = 0;
+  private lastIndex = 0;
   private readonly size: number = 0;
   private length: number = 0;
 
@@ -27,9 +29,14 @@ export class Queue<T> implements IQueue<T> {
     if (this.length >= this.size) {
       throw new Error("Maximum length exceeded");
     }
+    this.lastIndex = this.tail;
     this.container[this.tail] = item;
     this.tail = (this.tail + 1) % this.size;
     this.length++;
+  };
+
+  getLastIndex = () => {
+    return this.lastIndex;
   };
 
   dequeue = () => {
