@@ -47,7 +47,7 @@ export const FibonacciPage: React.FC = () => {
     if (!fib) {
       return null;
     }
-    fibonacci.current = getFibonacciNumbers(fib)!;
+    fibonacci.current = getFibonacciNumbers(Number(fib))!;
     setLoader(true);
     setNum(0);
     showCircles();
@@ -58,14 +58,14 @@ export const FibonacciPage: React.FC = () => {
       <form className={s.layout} onSubmit={handleSubmit}>
         <Input 
         extraClass={s.input} 
-        type="num" 
+        type="number" 
         name="fib" 
         value={fib!} 
         isLimitText={true} 
         max={19} 
         onChange={(e: ChangeEvent<HTMLInputElement>) => setFib(e.target.value)} 
         />
-        <Button text="Рассчитать" type="submit" isLoader={loader} />
+        <Button text="Рассчитать" type="submit" isLoader={loader} disabled={!fib || Number(fib) > 19} />
       </form>
       {fibonacci.current &&
       <ul className={s.ul}>

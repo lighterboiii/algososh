@@ -217,7 +217,7 @@ export const ListPage: React.FC = () => {
           />
         </fieldset>
         <fieldset className={s.layout} name='atIndex'>
-          <Input extraClass={s.input} type='text' name="index" value={inputValue.index} placeholder="Введите индекс" onChange={handleChange} />
+          <Input extraClass={s.input} type='number' name="index" value={inputValue.index} placeholder="Введите индекс" onChange={handleChange} />
           <Button
             text="Добавить по индексу"
             type="button"
