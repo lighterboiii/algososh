@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
@@ -9,10 +9,14 @@ import { Column } from "../ui/column/column";
 import { ElementStates } from "../../types/element-states";
 import { setDelay } from "../../constants/setDelay";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { useForm } from "../hooks/useForm";
 
 export const SortingPage: React.FC = () => {
   const [array, setArray] = useState<Array<ISort>>([]);
-  const [radio, setRadio] = useState('selectionSort');
+  const { values, handleChange } = useForm( {
+    select: 'selectionSort',
+    bubble: 'bubbleSort'
+  });
   const [loader, setLoader] = useState({
     asc: false,
     desc: false,
@@ -27,10 +31,6 @@ export const SortingPage: React.FC = () => {
     e.preventDefault();
     const newArr = randomArr();
     setArray(newArr);
-  };
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setRadio(e.target.value);
   };
 
   const selectionSort = async (array: Array<ISort>, direction: Direction) => {
@@ -94,10 +94,10 @@ export const SortingPage: React.FC = () => {
   }; 
 
   const handleSort = (direction: Direction) => {
-    if (radio === 'selectionSort') {
+    if (values.select === 'selectionSort') {
       selectionSort(array, direction);
   } 
-    else if (radio === 'bubbleSort') {
+    else if (values.bubble === 'bubbleSort') {
       bubbleSort(array, direction);
     }
   };
@@ -106,8 +106,20 @@ export const SortingPage: React.FC = () => {
     <SolutionLayout title="Сортировка массива">
       <form className={s.layout} onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()} >
         <fieldset name='radios' className={`${s.fieldset} + ${s.radios}`} >
-          <RadioInput disabled={loader.loader} label="Выбор" value='selectionSort' onChange={handleChange} checked={radio === 'selectionSort'} />
-          <RadioInput disabled={loader.loader} label="Пузырёк" value='bubbleSort' onChange={handleChange} checked={radio === 'bubbleSort'} />
+          <RadioInput 
+          name='select'
+          disabled={loader.loader} 
+          label="Выбор" 
+          value='selectionSort' 
+          onChange={handleChange} 
+          checked={values.select === 'selectionSort'} />
+          <RadioInput 
+          name='bubble'
+          disabled={loader.loader} 
+          label="Пузырёк" 
+          value='bubbleSort' 
+          onChange={handleChange} 
+          checked={values.bubble === 'bubbleSort'} />
         </fieldset>
         <fieldset name='buttons' className={`${s.fieldset} + ${s.buttons}`} >
           <Button

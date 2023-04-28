@@ -1,4 +1,4 @@
-import React, { FormEvent, useRef, useState, useEffect, ChangeEvent } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import s from './stack.module.css';
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
@@ -8,10 +8,11 @@ import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { setDelay } from "../../constants/setDelay";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { useForm } from "../hooks/useForm";
 
 export const StackPage: React.FC = () => {
   const ref = useRef(new Stack());
-  const [value, setValue] = useState('');
+  const { values, setValues, handleChange } = useForm({ stack: ''});
   const [loader, setLoader] = useState({
     add: false,
     remove: false
@@ -26,8 +27,8 @@ export const StackPage: React.FC = () => {
 
   const addElement = async () => {
     setLoader({ ...loader, add: true });
-    setValue('');
-    ref.current.push(value);
+    setValues({ stack: '' });
+    ref.current.push(values.stack);
     showCircles();
     setTopIndex(ref.current.index);
     await setDelay(SHORT_DELAY_IN_MS);
@@ -46,7 +47,7 @@ export const StackPage: React.FC = () => {
   };
 
   const handleClear = async () => {
-    setValue('');
+    setValues({ stack: '' });
     ref.current.clear();
     showCircles();
   };
@@ -55,12 +56,14 @@ export const StackPage: React.FC = () => {
     <SolutionLayout title="Стек">
       <form className={s.wrapper} onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()}>
         <div className={s.inner}>
-          <Input extraClass={s.input}
+          <Input 
+          name='stack'
+          extraClass={s.input}
             maxLength={4}
-            value={value}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+            value={values.stack}
+            onChange={handleChange}
             isLimitText={true} />
-          <Button text='Добавить' type='submit' disabled={!value || loader.remove} onClick={addElement} isLoader={loader.add} />
+          <Button text='Добавить' type='submit' disabled={!values.stack || loader.remove} onClick={addElement} isLoader={loader.add} />
           <Button text='Удалить' type='button' disabled={res.length === 0 || loader.add} onClick={removeElement} isLoader={loader.remove} />
         </div>
         <Button text='Очистить' type='reset' disabled={res.length === 0 || loader.add || loader.remove} onClick={handleClear} />

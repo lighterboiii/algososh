@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import s from './list.module.css';
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
@@ -25,7 +25,6 @@ export const ListPage: React.FC = () => {
     deleteHead: false,
     disabled: false
   });
-  // const [inputValue, setInputValue] = useState({ value: '', index: '' });
   const [list, setList] = useState<IListNode<IArray>[]>([]);
   const [currIndex, setCurrIndex] = useState(-1);
   const [isTopCircle, setIsTopCircle] = useState(false);
@@ -41,10 +40,6 @@ export const ListPage: React.FC = () => {
     setLinkedList();
     setList(linkedList.toArray());
   }, []);
-
-  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setInputValue({ ...inputValue, [e.target.name]: e.target.value });
-  // };
 
   const addToHead = async () => {
     setLoader({ ...loader, addHead: true, disabled: true });
