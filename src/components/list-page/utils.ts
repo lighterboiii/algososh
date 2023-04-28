@@ -15,7 +15,6 @@ export const generateArray = () => {
 
 export const setLinkedList = () => {
   const array = generateArray().map(el => String(el));
-  console.log(array)
   array.forEach(el => {
     linkedList.append({ value: el, state: ElementStates.Default })
   })

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
@@ -18,6 +18,10 @@ export const SortingPage: React.FC = () => {
     desc: false,
     loader: false
   });
+
+  useEffect(() => {
+    setArray(randomArr());
+  }, []);
 
   const generateArray = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
