@@ -1,4 +1,4 @@
-export const getFibonacciNumbers = (num: any) => {
+export const getFibonacciNumbers = (num: number) => {
   if (num < 1 || num > 19) {
     alert("Please enter a positive integer between 1 and 19.");
     return;
