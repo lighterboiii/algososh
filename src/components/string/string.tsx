@@ -1,4 +1,4 @@
-import React, { useState, useRef, FormEvent, ChangeEvent } from "react";
+import React, { useState, FormEvent } from "react";
 import s from "./string.module.css";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
@@ -8,17 +8,18 @@ import { ISort, sort } from "./algorithm";
 import { setDelay } from "../../constants/setDelay";
 import { DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
+import { useForm } from "../hooks/useForm";
 
 export const StringComponent: React.FC = () => {
 
-  const [inputValue, setInputValue] = useState('');
-  const [letters, setLetters] = useState<Array<ISort>>([]);
   const [loader, setLoader] = useState(false);
+  const [letters, setLetters] = useState<Array<ISort>>([]);
+  const { values, setValues, handleChange } = useForm({ string: '' });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const wordArray = inputValue.split('').map((letter) => {
+    const wordArray = values.string.split('').map((letter) => {
       return { letter, state: ElementStates.Default };
     });
 
@@ -53,9 +54,9 @@ export const StringComponent: React.FC = () => {
           name="string"
           isLimitText={true}
           maxLength={11}
-          value={inputValue}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)} />
-        <Button text="Развернуть" type="submit" isLoader={loader} disabled={!inputValue || inputValue.length > 11} />
+          value={values.string}
+          onChange={handleChange} />
+        <Button text="Развернуть" type="submit" isLoader={loader} disabled={!values.string || values.string.length > 11} />
       </form>
       <ul className={s.list}>
         {letters.map((letter, index) => {
