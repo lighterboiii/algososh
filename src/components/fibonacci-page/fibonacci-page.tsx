@@ -5,12 +5,14 @@ import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { getFibonacciNumbers } from "./algorithm";
+import { useForm } from "../hooks/useForm";
 
 export const FibonacciPage: React.FC = () => {
 
   const [num, setNum] = useState(0);
   const [loader, setLoader] = useState(false);
-  const [fib, setFib] = useState<string>('');
+  // const [fib, setFib] = useState<string>('');
+  const { values, handleChange } = useForm({ fib: '' as string });
 
   const fibonacci = useRef<Array<number>>([]);
   const timer = useRef<NodeJS.Timeout>();
@@ -44,10 +46,10 @@ export const FibonacciPage: React.FC = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!fib) {
+    if (!values.fib) {
       return null;
     }
-    fibonacci.current = getFibonacciNumbers(Number(fib))!;
+    fibonacci.current = getFibonacciNumbers(Number(values.fib))!;
     setLoader(true);
     setNum(0);
     showCircles();
@@ -60,12 +62,12 @@ export const FibonacciPage: React.FC = () => {
         extraClass={s.input} 
         type="number" 
         name="fib" 
-        value={fib!} 
+        value={values.fib} 
         isLimitText={true} 
         max={19} 
-        onChange={(e: ChangeEvent<HTMLInputElement>) => setFib(e.target.value)} 
+        onChange={handleChange} 
         />
-        <Button text="Рассчитать" type="submit" isLoader={loader} disabled={!fib || Number(fib) > 19} />
+        <Button text="Рассчитать" type="submit" isLoader={loader} disabled={!values.fib || Number(values.fib) > 19} />
       </form>
       {fibonacci.current &&
       <ul className={s.ul}>
