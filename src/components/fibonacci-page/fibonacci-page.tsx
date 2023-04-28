@@ -11,7 +11,6 @@ export const FibonacciPage: React.FC = () => {
 
   const [num, setNum] = useState(0);
   const [loader, setLoader] = useState(false);
-  // const [fib, setFib] = useState<string>('');
   const { values, handleChange } = useForm({ fib: '' as string });
 
   const fibonacci = useRef<Array<number>>([]);

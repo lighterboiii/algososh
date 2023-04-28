@@ -12,6 +12,7 @@ import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { ElementStates } from "../../types/element-states";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { HEAD, TAIL } from "../../constants/element-captions";
+import { useForm } from "../hooks/useForm";
 
 export const ListPage: React.FC = () => {
   const linkedListSize = linkedList.getSize();
@@ -24,34 +25,38 @@ export const ListPage: React.FC = () => {
     deleteHead: false,
     disabled: false
   });
-  const [inputValue, setInputValue] = useState({ value: '', index: '' });
+  // const [inputValue, setInputValue] = useState({ value: '', index: '' });
   const [list, setList] = useState<IListNode<IArray>[]>([]);
   const [currIndex, setCurrIndex] = useState(-1);
   const [isTopCircle, setIsTopCircle] = useState(false);
   const [currElement, setCurrElement] = useState('');
   const [changingIndex, setChangingIndex] = useState(-1);
   const [modIndex, setModIndex] = useState(-1);
+  const { values, handleChange, setValues } = useForm({
+    index: '',
+    value: ''
+  });
 
   useEffect(() => {
     setLinkedList();
     setList(linkedList.toArray());
   }, []);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue({ ...inputValue, [e.target.name]: e.target.value });
-  };
+  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setInputValue({ ...inputValue, [e.target.name]: e.target.value });
+  // };
 
   const addToHead = async () => {
     setLoader({ ...loader, addHead: true, disabled: true });
-    const newNode = { value: inputValue.value, state: ElementStates.Default };
+    const newNode = { value: values.value, state: ElementStates.Default };
     linkedList.prepend(newNode);
     setCurrIndex(0);
     setIsTopCircle(true);
-    setCurrElement(inputValue.value);
+    setCurrElement(values.value);
     await setDelay(SHORT_DELAY_IN_MS);
     setCurrElement('');
     setIsTopCircle(false);
-    setInputValue({ value: '', index: '' });
+    setValues({ value: '', index: '' });
     setCurrIndex(-1);
     setList([...linkedList.toArray()]);
     setModIndex(0);
@@ -63,13 +68,13 @@ export const ListPage: React.FC = () => {
 
   const addToTail = async () => {
     setLoader({ ...loader, addTail: true, disabled: true });
-    const newNode = { value: inputValue.value, state: ElementStates.Default };
+    const newNode = { value: values.value, state: ElementStates.Default };
     linkedList.append(newNode);
     setCurrIndex(linkedListSize - 1);
-    setCurrElement(inputValue.value);
+    setCurrElement(values.value);
     await setDelay(SHORT_DELAY_IN_MS);
     setCurrElement('');
-    setInputValue({ value: '', index: '' });
+    setValues({ value: '', index: '' });
     setCurrIndex(-1);
     setList([...linkedList.toArray()]);
     setModIndex(linkedListSize);
@@ -109,24 +114,24 @@ export const ListPage: React.FC = () => {
   const insertAt = async () => {
     setLoader({ ...loader, addAt: true, disabled: true });
     setIsTopCircle(true);
-    setCurrElement(inputValue.value);
+    setCurrElement(values.value);
     let start = 0;
-    while (start <= Number(inputValue.index)) {
+    while (start <= Number(values.index)) {
       setChangingIndex(start);
       setCurrIndex(start);
       await setDelay(SHORT_DELAY_IN_MS);
       start++;
     }
-    setCurrIndex(Number(inputValue.index));
-    const newNode = { value: inputValue.value, index: inputValue.index, state: ElementStates.Default };
+    setCurrIndex(Number(values.index));
+    const newNode = { value: values.value, index: values.index, state: ElementStates.Default };
     linkedList.addAtIndex(newNode, Number(newNode.index));
-    setInputValue({ value: '', index: '' });
+    setValues({ value: '', index: '' });
     await setDelay(SHORT_DELAY_IN_MS);
     setCurrIndex(-1);
     setCurrElement('');
     setChangingIndex(-1);
     setList([...linkedList.toArray()]);
-    setModIndex(Number(inputValue.index));
+    setModIndex(Number(values.index));
     await setDelay(SHORT_DELAY_IN_MS);
     setModIndex(-1);
     setList([...linkedList.toArray()]);
@@ -137,16 +142,16 @@ export const ListPage: React.FC = () => {
   const deleteAt = async () => {
     setLoader({ ...loader, deleteAt: true, disabled: true });
     let start = 0;
-    while (start <= Number(inputValue.index)) {
+    while (start <= Number(values.index)) {
       setChangingIndex(start);
       await setDelay(SHORT_DELAY_IN_MS);
       start++;
     }
-    setCurrIndex(Number(inputValue.index));
-    setCurrElement(list[Number(inputValue.index)].value.value);
-    linkedList.getNodeAtIndex(Number(inputValue.index))!.value.value = '';
-    linkedList.removeAtIndex(Number(inputValue.index));
-    setInputValue({ value: '', index: '' });
+    setCurrIndex(Number(values.index));
+    setCurrElement(list[Number(values.index)].value.value);
+    linkedList.getNodeAtIndex(Number(values.index))!.value.value = '';
+    linkedList.removeAtIndex(Number(values.index));
+    setValues({ value: '', index: '' });
     await setDelay(SHORT_DELAY_IN_MS);
     setChangingIndex(-1);
     setCurrIndex(-1);
@@ -178,7 +183,7 @@ export const ListPage: React.FC = () => {
             extraClass={s.input}
             type='text'
             name="value"
-            value={inputValue.value}
+            value={values.value}
             placeholder="Введите значение"
             isLimitText={true}
             maxLength={4}
@@ -190,7 +195,7 @@ export const ListPage: React.FC = () => {
             extraClass={s.smallButton}
             onClick={addToHead}
             isLoader={loader.addHead}
-            disabled={!inputValue.value || loader.disabled}
+            disabled={!values.value || loader.disabled}
           />
           <Button
             text="Добавить в tail"
@@ -198,7 +203,7 @@ export const ListPage: React.FC = () => {
             extraClass={s.smallButton}
             onClick={addToTail}
             isLoader={loader.addTail}
-            disabled={!inputValue.value || loader.disabled}
+            disabled={!values.value || loader.disabled}
           />
           <Button
             text="Удалить из head" type="button"
@@ -217,13 +222,13 @@ export const ListPage: React.FC = () => {
           />
         </fieldset>
         <fieldset className={s.layout} name='atIndex'>
-          <Input extraClass={s.input} type='number' name="index" value={inputValue.index} placeholder="Введите индекс" onChange={handleChange} />
+          <Input extraClass={s.input} type='number' name="index" value={values.index} placeholder="Введите индекс" onChange={handleChange} />
           <Button
             text="Добавить по индексу"
             type="button"
             extraClass={s.button}
             onClick={insertAt}
-            disabled={!inputValue.index || loader.disabled || Number(inputValue.index) > list.length - 1}
+            disabled={!values.index || loader.disabled || Number(values.index) > list.length - 1}
             isLoader={loader.addAt}
           />
           <Button
@@ -231,7 +236,7 @@ export const ListPage: React.FC = () => {
             type="button"
             extraClass={s.button}
             onClick={deleteAt}
-            disabled={!inputValue.index || loader.disabled || Number(inputValue.index) > list.length - 1}
+            disabled={!values.index || loader.disabled || Number(values.index) > list.length - 1}
             isLoader={loader.deleteAt}
           />
         </fieldset>
