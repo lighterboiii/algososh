@@ -1,0 +1,65 @@
+.layout {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 952px;
+  border: none;
+}
+
+.input {
+  max-width: 204px;
+}
+
+.smallButton {
+  width: 175px;
+}
+
+.button {
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 90px;
+}
+
+.ul {
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 21px;
+}
+
+.circles {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.topCircle {
+  position: absolute;
+  top: -64px;
+  left: 12px;
+}
+
+.bottomCircle {
+  position: absolute;
+  top: 112px;
+  left: 12px;
+}
