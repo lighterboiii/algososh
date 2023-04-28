@@ -223,7 +223,7 @@ export const ListPage: React.FC = () => {
             type="button"
             extraClass={s.button}
             onClick={insertAt}
-            disabled={!inputValue.value || loader.disabled}
+            disabled={!inputValue.index || loader.disabled || Number(inputValue.index) > list.length - 1}
             isLoader={loader.addAt}
           />
           <Button
@@ -231,7 +231,7 @@ export const ListPage: React.FC = () => {
             type="button"
             extraClass={s.button}
             onClick={deleteAt}
-            disabled={!inputValue.index || loader.disabled }
+            disabled={!inputValue.index || loader.disabled || Number(inputValue.index) > list.length - 1}
             isLoader={loader.deleteAt}
           />
         </fieldset>
