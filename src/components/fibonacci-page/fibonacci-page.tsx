@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import s from "./fib.module.css";
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
@@ -56,7 +56,15 @@ export const FibonacciPage: React.FC = () => {
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
       <form className={s.layout} onSubmit={handleSubmit}>
-        <Input extraClass={s.input} type="num" name="fib" value={fib!} isLimitText={true} max={19} onChange={(e: any) => setFib(e.target.value)} />
+        <Input 
+        extraClass={s.input} 
+        type="num" 
+        name="fib" 
+        value={fib!} 
+        isLimitText={true} 
+        max={19} 
+        onChange={(e: ChangeEvent<HTMLInputElement>) => setFib(e.target.value)} 
+        />
         <Button text="Рассчитать" type="submit" isLoader={loader} />
       </form>
       {fibonacci.current &&

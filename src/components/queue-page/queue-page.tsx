@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import s from './queue.module.css';
 import { Input } from "../ui/input/input";
@@ -25,13 +25,6 @@ export const QueuePage: React.FC = () => {
     setQueue(q.toArray().fill(''));
   }, []);
 
-  // useEffect(() => {
-  //   if (q.isEmpty()) {
-  //     q.clear();
-  //     setQueue([...q.toArray().fill('')]);
-  //   }
-  // }, [q]);
-  // console.log(q);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
@@ -75,7 +68,7 @@ export const QueuePage: React.FC = () => {
 
   return (
     <SolutionLayout title="Очередь">
-      <form className={s.form} onSubmit={e => e.preventDefault}>
+      <form className={s.form} onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()}>
         <fieldset className={s.fieldset} >
           <Input
             disabled={q.isFull()}

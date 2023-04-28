@@ -100,7 +100,7 @@ export const SortingPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Сортировка массива">
-      <form className={s.layout} >
+      <form className={s.layout} onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()} >
         <fieldset name='radios' className={`${s.fieldset} + ${s.radios}`} >
           <RadioInput disabled={loader.loader} label="Выбор" value='selectionSort' onChange={handleChange} checked={radio === 'selectionSort'} />
           <RadioInput disabled={loader.loader} label="Пузырёк" value='bubbleSort' onChange={handleChange} checked={radio === 'bubbleSort'} />

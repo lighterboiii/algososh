@@ -1,4 +1,4 @@
-import React, { FormEvent, useRef, useState, useEffect } from "react";
+import React, { FormEvent, useRef, useState, useEffect, ChangeEvent } from "react";
 import s from './stack.module.css';
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
@@ -58,7 +58,7 @@ export const StackPage: React.FC = () => {
           <Input extraClass={s.input}
             maxLength={4}
             value={value}
-            onChange={(e: any) => setValue(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
             isLimitText={true} />
           <Button text='Добавить' type='submit' disabled={!value || loader.remove} onClick={addElement} isLoader={loader.add} />
           <Button text='Удалить' type='button' disabled={res.length === 0 || loader.add} onClick={removeElement} isLoader={loader.remove} />

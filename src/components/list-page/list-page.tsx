@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import s from './list.module.css';
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
@@ -172,7 +172,7 @@ export const ListPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Связный список">
-      <form className={s.container} onSubmit={e => e.preventDefault()} >
+      <form className={s.container} onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()} >
         <fieldset className={s.layout} name='tailhead' >
           <Input
             extraClass={s.input}
