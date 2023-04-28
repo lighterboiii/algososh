@@ -55,7 +55,7 @@ export const StringComponent: React.FC = () => {
           maxLength={11}
           value={inputValue}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)} />
-        <Button text="Развернуть" type="submit" isLoader={loader} />
+        <Button text="Развернуть" type="submit" isLoader={loader} disabled={!inputValue || inputValue.length > 11} />
       </form>
       <ul className={s.list}>
         {letters.map((letter, index) => {
