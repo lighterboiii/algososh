@@ -2,7 +2,7 @@ import renderer from 'react-test-renderer';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Button } from '../button';
 
-describe('Тест компонента Button', () => {
+describe('Тест компонента Button:', () => {
   it('Компонент Button с текстом отрисован корректно', () => {
     const button = renderer.create(<Button text='Новый массив' />).toJSON();
     expect(button).toMatchSnapshot();
@@ -15,7 +15,7 @@ describe('Тест компонента Button', () => {
     const button = renderer.create(<Button disabled />).toJSON();
     expect(button).toMatchSnapshot();
   });
-  it('Компонент Button в заблокированном состоянии отрисован корректно', () => {
+  it('Компонент Button в состоянии загрузки отрисован корректно', () => {
     const button = renderer.create(<Button isLoader />).toJSON();
     expect(button).toMatchSnapshot();
   });
