@@ -28,7 +28,7 @@ export const StringComponent: React.FC = () => {
 
     const end = wordArray.length - 1;
     const mid = Math.floor(wordArray.length / 2);
-    for (let i = 0; i <= mid; i++) {
+    for (let i = 0; i < mid; i++) {
       let j = end - i;
       if (i !== j) {
         [wordArray[i].state, wordArray[j].state] = [ElementStates.Changing, ElementStates.Changing];
