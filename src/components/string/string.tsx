@@ -27,7 +27,7 @@ export const StringComponent: React.FC = () => {
     setLetters(wordArray);
 
     const end = wordArray.length - 1;
-    const mid = Math.floor(wordArray.length / 2);
+    const mid = Math.ceil(wordArray.length / 2);
     for (let i = 0; i < mid; i++) {
       let j = end - i;
       if (i !== j) {
