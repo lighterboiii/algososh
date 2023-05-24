@@ -15,3 +15,7 @@ export const circleSmall = '[class*="circle_small"]';
 export const modifiedState = "circle_modified";
 export const defaultState = "circle_default";
 export const changingState = "circle_changing";
+
+export const addButton = '[data="add-button"]';
+export const deleteButton = '[data="delete-button"]';
+export const clearButton = '[data="clear-button"]';
