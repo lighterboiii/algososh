@@ -6,7 +6,7 @@ describe("Тест визуализатора алгоритма 'Строка'"
     cy.visit('/recursion');
   });
 
-  it("Кнопка 'Развернуть' заблокирована при пустом инпуте", () => {
+  it("Начальное состояние страницы отрисовано корректно", () => {
     cy.get('button').last().as('button');
     cy.get(input).should('have.value', '');
     cy.get('@button').should('be.disabled');
@@ -21,6 +21,7 @@ describe("Тест визуализатора алгоритма 'Строка'"
     cy.get('@button')
       .invoke("attr", "class")
       .then((className) => expect(className).contains('loader'));
+
     cy.get(circle).then((item) => {
       cy.get(item[0])
         .invoke("attr", "class")
@@ -85,6 +86,11 @@ describe("Тест визуализатора алгоритма 'Строка'"
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(modifiedState));
       cy.get(item[3]).children().should("have.text", 'к');
+
+      cy.wait(DELAY_IN_MS);
+
+      cy.get(input).should('have.text', '');
+      cy.get('@button').should('be.disabled');
     });
   });
 });

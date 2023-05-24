@@ -14,7 +14,7 @@ export const StringComponent: React.FC = () => {
 
   const [loader, setLoader] = useState(false);
   const [letters, setLetters] = useState<Array<ISort>>([]);
-  const { values, handleChange } = useForm({ string: '' });
+  const { values, setValues, handleChange } = useForm({ string: '' });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,6 +42,7 @@ export const StringComponent: React.FC = () => {
 
       setLetters([...wordArray]);
     };
+    setValues({ string: '' });
     setLoader(false);
   };
 
