@@ -121,7 +121,7 @@ export const ListPage: React.FC = () => {
     const newNode = { value: values.value, index: values.index, state: ElementStates.Default };
     linkedList.addAtIndex(newNode, Number(newNode.index));
     setValues({ value: '', index: '' });
-    await setDelay(SHORT_DELAY_IN_MS);
+    // await setDelay(SHORT_DELAY_IN_MS);
     setCurrIndex(-1);
     setCurrElement('');
     setChangingIndex(-1);
@@ -129,6 +129,7 @@ export const ListPage: React.FC = () => {
     setModIndex(Number(values.index));
     await setDelay(SHORT_DELAY_IN_MS);
     setModIndex(-1);
+    setChangingIndex(-1);
     setList([...linkedList.toArray()]);
     setIsTopCircle(false);
     setLoader({ ...loader, addAt: false, disabled: false });
@@ -238,7 +239,7 @@ export const ListPage: React.FC = () => {
             data="add-at-index-button"
             extraClass={s.button}
             onClick={insertAt}
-            disabled={!values.index || loader.disabled || Number(values.index) > list.length - 1}
+            disabled={!values.index || loader.disabled || Number(values.index) > list.length - 1 || !values.value}
             isLoader={loader.addAt}
           />
           <Button
