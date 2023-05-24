@@ -1,18 +1,18 @@
 import {
+  circle,
   indexValue,
   inputValue,
-  circle,
-  addAtHeadButton,
-  addAtIndexButton,
-  addAtTailButton,
-  deleteAtHeadButton,
-  deleteAtIndexButton,
-  deleteAtTailButton,
-  circleContent,
   circleSmall,
+  defaultState,
+  circleContent,
   changingState,
   modifiedState,
-  defaultState,
+  addAtHeadButton,
+  addAtTailButton,
+  addAtIndexButton,
+  deleteAtHeadButton,
+  deleteAtTailButton,
+  deleteAtIndexButton,
 } from "../constants";
 import { SHORT_DELAY_IN_MS } from "../../src/constants/delays";
 
@@ -20,9 +20,9 @@ export const getCirclesData = (array) => {
   cy.get(circle).then((item) => {
     cy.get(item).children().each((child) => {
       array.push(child.text());
-    })
-  })
-}
+    });
+  });
+};
 
 describe('Тестирование визуализации структуры данных "Список":', () => {
   beforeEach(() => {
@@ -109,8 +109,6 @@ describe('Тестирование визуализации структуры �
   });
 
   it('Добавление элемента по индексу реализовано корректно', () => {
-    let arrayOfCircles = [];
-    getCirclesData(arrayOfCircles);
     const value = "666";
     const index = "1";
     cy.get(inputValue).type(value);
@@ -145,5 +143,51 @@ describe('Тестирование визуализации структуры �
     cy.get(indexValue).should("have.text", '');
     cy.get(inputValue).should("have.text", '');
     cy.get(addAtIndexButton).should("be.disabled");
+  });
+
+  it('Удаление элемента из head реализовано корректно', () => {
+    let arrayOfCircles = [];
+    getCirclesData(arrayOfCircles);
+    cy.get(deleteAtHeadButton).should("not.be.disabled");
+    cy.get(deleteAtHeadButton).click();
+    cy.get(deleteAtHeadButton)
+      .invoke("attr", "class")
+      .then((classList) => expect(classList).contains('loader'));
+    cy.get(circleContent).then((item) => {
+      cy.get(item[0])
+        .find(circleSmall)
+        .invoke("attr", "class")
+        .then((classList) => expect(classList).contains(changingState));
+      cy.get(item[0]).find(circleSmall).children().should("have.text", arrayOfCircles[0]);
+    });
+    cy.get(circle).then((item) => {
+      cy.get(item[0])
+        .invoke("attr", "class")
+        .then((classList) => expect(classList).contains(changingState));
+      cy.get(item[1]).children().should("have.text", '');
+    });
+  });
+
+  it('Удаление элемента из tail реализовано корректно', () => {
+    let arrayOfCircles = [];
+    getCirclesData(arrayOfCircles);
+    cy.get(deleteAtTailButton).should("not.be.disabled");
+    cy.get(deleteAtTailButton).click();
+    cy.get(deleteAtTailButton)
+      .invoke("attr", "class")
+      .then((classList) => expect(classList).contains('loader'));
+    cy.get(circleContent).then((item) => {
+      cy.get(item[arrayOfCircles.length - 1])
+        .find(circleSmall)
+        .invoke("attr", "class")
+        .then((classList) => expect(classList).contains(changingState));
+      cy.get(item[arrayOfCircles.length - 1]).find(circleSmall).children().should("have.text", arrayOfCircles[arrayOfCircles.length - 1]);
+    });
+    cy.get(circle).then((item) => {
+      cy.get(item[arrayOfCircles.length])
+        .invoke("attr", "class")
+        .then((classList) => expect(classList).contains(changingState));
+      cy.get(item[arrayOfCircles.length - 1]).children().should("have.text", '');
+    });
   });
 });
