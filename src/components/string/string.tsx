@@ -56,7 +56,11 @@ export const StringComponent: React.FC = () => {
           maxLength={11}
           value={values.string}
           onChange={handleChange} />
-        <Button text="Развернуть" type="submit" isLoader={loader} disabled={!values.string || values.string.length > 11} />
+        <Button
+          text="Развернуть"
+          type="submit"
+          isLoader={loader}
+          disabled={!values.string || values.string.length > 11} />
       </form>
       <ul className={s.list}>
         {letters.map((letter, index) => {

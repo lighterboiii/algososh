@@ -121,7 +121,6 @@ export const ListPage: React.FC = () => {
     const newNode = { value: values.value, index: values.index, state: ElementStates.Default };
     linkedList.addAtIndex(newNode, Number(newNode.index));
     setValues({ value: '', index: '' });
-    // await setDelay(SHORT_DELAY_IN_MS);
     setCurrIndex(-1);
     setCurrElement('');
     setChangingIndex(-1);
