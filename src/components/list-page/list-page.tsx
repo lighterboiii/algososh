@@ -178,6 +178,7 @@ export const ListPage: React.FC = () => {
             extraClass={s.input}
             type='text'
             name="value"
+            data="input-value"
             value={values.value}
             placeholder="Введите значение"
             isLimitText={true}
@@ -187,6 +188,7 @@ export const ListPage: React.FC = () => {
           <Button
             text="Добавить в head"
             type="button"
+            data="add-at-head-button"
             extraClass={s.smallButton}
             onClick={addToHead}
             isLoader={loader.addHead}
@@ -195,13 +197,16 @@ export const ListPage: React.FC = () => {
           <Button
             text="Добавить в tail"
             type="button"
+            data="add-at-tail-button"
             extraClass={s.smallButton}
             onClick={addToTail}
             isLoader={loader.addTail}
             disabled={!values.value || loader.disabled}
           />
           <Button
-            text="Удалить из head" type="button"
+            text="Удалить из head" 
+            type="button"
+            data="delete-at-head-button"
             extraClass={s.smallButton}
             onClick={removeFromHead}
             isLoader={loader.deleteHead}
@@ -210,6 +215,7 @@ export const ListPage: React.FC = () => {
           <Button
             text="Удалить из tail"
             type="button"
+            data="delete-at-tail-button"
             extraClass={s.smallButton}
             onClick={removeFromTail}
             isLoader={loader.deleteTail}
@@ -217,10 +223,19 @@ export const ListPage: React.FC = () => {
           />
         </fieldset>
         <fieldset className={s.layout} name='atIndex'>
-          <Input extraClass={s.input} type='number' name="index" value={values.index} placeholder="Введите индекс" onChange={handleChange} />
+          <Input 
+          extraClass={s.input} 
+          type='number' 
+          name="index" 
+          data="index-value"
+          value={values.index} 
+          placeholder="Введите индекс" 
+          onChange={handleChange} 
+          />
           <Button
             text="Добавить по индексу"
             type="button"
+            data="add-at-index-button"
             extraClass={s.button}
             onClick={insertAt}
             disabled={!values.index || loader.disabled || Number(values.index) > list.length - 1}
@@ -229,6 +244,7 @@ export const ListPage: React.FC = () => {
           <Button
             text="Удалить по индексу"
             type="button"
+            data="delete-at-index-button"
             extraClass={s.button}
             onClick={deleteAt}
             disabled={!values.index || loader.disabled || Number(values.index) > list.length - 1}
