@@ -14,7 +14,7 @@ export const StringComponent: React.FC = () => {
 
   const [loader, setLoader] = useState(false);
   const [letters, setLetters] = useState<Array<ISort>>([]);
-  const { values, handleChange } = useForm({ string: '' });
+  const { values, setValues, handleChange } = useForm({ string: '' });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,8 +27,8 @@ export const StringComponent: React.FC = () => {
     setLetters(wordArray);
 
     const end = wordArray.length - 1;
-    const mid = Math.floor(wordArray.length / 2);
-    for (let i = 0; i <= mid; i++) {
+    const mid = Math.ceil(wordArray.length / 2);
+    for (let i = 0; i < mid; i++) {
       let j = end - i;
       if (i !== j) {
         [wordArray[i].state, wordArray[j].state] = [ElementStates.Changing, ElementStates.Changing];
@@ -42,6 +42,7 @@ export const StringComponent: React.FC = () => {
 
       setLetters([...wordArray]);
     };
+    setValues({ string: '' });
     setLoader(false);
   };
 
@@ -56,7 +57,11 @@ export const StringComponent: React.FC = () => {
           maxLength={11}
           value={values.string}
           onChange={handleChange} />
-        <Button text="Развернуть" type="submit" isLoader={loader} disabled={!values.string || values.string.length > 11} />
+        <Button
+          text="Развернуть"
+          type="submit"
+          isLoader={loader}
+          disabled={!values.string || values.string.length > 11} />
       </form>
       <ul className={s.list}>
         {letters.map((letter, index) => {

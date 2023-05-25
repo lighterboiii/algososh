@@ -74,10 +74,28 @@ export const QueuePage: React.FC = () => {
             onChange={handleChange}
             maxLength={4}
             isLimitText={true} />
-          <Button text="Добавить" type='button' isLoader={loader.add} disabled={loader.delete || !values.queue} onClick={addItem} />
-          <Button text="Удалить" type='button' isLoader={loader.delete} disabled={loader.add || q.isEmpty()} onClick={delItem} />
+          <Button
+            text="Добавить"
+            type='button'
+            data="add-button"
+            isLoader={loader.add}
+            disabled={loader.delete || !values.queue}
+            onClick={addItem} />
+          <Button
+            text="Удалить"
+            type='button'
+            data="delete-button"
+            isLoader={loader.delete}
+            disabled={loader.add || q.isEmpty()}
+            onClick={delItem} />
         </fieldset>
-        <Button text="Очистить" type='button' extraClass={s.formButton} isLoader={loader.clear} disabled={q.isEmpty()} onClick={clearQueue} />
+        <Button
+          text="Очистить"
+          type='button'
+          data="clear-button"
+          extraClass={s.formButton}
+          isLoader={loader.clear} disabled={q.isEmpty()}
+          onClick={clearQueue} />
       </form>
       <ul className={s.ul}>
         {queue.map((item, index) => {

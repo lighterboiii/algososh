@@ -11,7 +11,7 @@ export const FibonacciPage: React.FC = () => {
 
   const [num, setNum] = useState(0);
   const [loader, setLoader] = useState(false);
-  const { values, handleChange } = useForm({ fib: '' as string });
+  const { values, setValues, handleChange } = useForm({ fib: '' as string });
 
   const fibonacci = useRef<Array<number>>([]);
   const timer = useRef<NodeJS.Timeout>();
@@ -52,6 +52,7 @@ export const FibonacciPage: React.FC = () => {
     setLoader(true);
     setNum(0);
     showCircles();
+    setValues({ fib: '' });
   };
 
   return (
