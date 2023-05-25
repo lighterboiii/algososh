@@ -118,8 +118,6 @@ describe("Тест визуализации структуры данных оч
     cy.get(deleteButton).should('be.disabled');
     cy.get(clearButton).should('be.disabled');
 
-    cy.wait(SHORT_DELAY_IN_MS);
-
     queue.map(val => {
       enqueue(val);
     });
@@ -157,8 +155,6 @@ describe("Тест визуализации структуры данных оч
     cy.get(addButton).should('be.disabled');
     cy.get(deleteButton).should('be.disabled');
     cy.get(clearButton).should('be.disabled');
-
-    cy.wait(SHORT_DELAY_IN_MS);
 
     queue.map(val => {
       enqueue(val);
