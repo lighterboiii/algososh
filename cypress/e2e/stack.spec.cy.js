@@ -123,7 +123,8 @@ describe("Тест визуализации структуры данных 'С�
     });
 
     cy.get(clearButton).click();
-    
+    // cy.wrap(circleContent).should('have.length', 0);
+
     cy.wait(SHORT_DELAY_IN_MS);
     
     cy.get(input).should('have.value', '');
