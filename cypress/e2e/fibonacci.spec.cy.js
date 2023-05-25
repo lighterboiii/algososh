@@ -1,7 +1,7 @@
 import { SHORT_DELAY_IN_MS } from "../../src/constants/delays";
 import { circle, defaultState, input } from "../constants";
 
-describe("Тест компонента  'Последовательность Фибоначчи'", () => {
+describe("Тест компонента 'Последовательность Фибоначчи'", () => {
   beforeEach(() => {
     cy.visit('/fibonacci');
   });

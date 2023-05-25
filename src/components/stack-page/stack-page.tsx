@@ -12,7 +12,7 @@ import { useForm } from "../hooks/useForm";
 
 export const StackPage: React.FC = () => {
   const ref = useRef(new Stack());
-  const { values, setValues, handleChange } = useForm({ stack: ''});
+  const { values, setValues, handleChange } = useForm({ stack: '' });
   const [loader, setLoader] = useState({
     add: false,
     remove: false
@@ -56,17 +56,34 @@ export const StackPage: React.FC = () => {
     <SolutionLayout title="Стек">
       <form className={s.wrapper} onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()}>
         <div className={s.inner}>
-          <Input 
-          name='stack'
-          extraClass={s.input}
+          <Input
+            name='stack'
+            extraClass={s.input}
             maxLength={4}
             value={values.stack}
             onChange={handleChange}
             isLimitText={true} />
-          <Button text='Добавить' type='submit' disabled={!values.stack || loader.remove} onClick={addElement} isLoader={loader.add} />
-          <Button text='Удалить' type='button' disabled={res.length === 0 || loader.add} onClick={removeElement} isLoader={loader.remove} />
+          <Button
+            text='Добавить'
+            type='submit'
+            data="add-button"
+            disabled={!values.stack || loader.remove}
+            onClick={addElement}
+            isLoader={loader.add} />
+          <Button
+            text='Удалить'
+            type='button'
+            data="delete-button"
+            disabled={res.length === 0 || loader.add}
+            onClick={removeElement}
+            isLoader={loader.remove} />
         </div>
-        <Button text='Очистить' type='reset' disabled={res.length === 0 || loader.add || loader.remove} onClick={handleClear} />
+        <Button
+          text='Очистить'
+          type='reset'
+          data="clear-button"
+          disabled={res.length === 0 || loader.add || loader.remove}
+          onClick={handleClear} />
       </form>
       <ul className={s.ul} >
         {res.map((el, index) => {
