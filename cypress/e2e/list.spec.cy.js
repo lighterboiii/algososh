@@ -24,12 +24,12 @@ export const getCirclesData = (array) => {
   });
 };
 
-describe('Тестирование визуализации структуры данных "Список":', () => {
+describe("Тестирование визуализации структуры данных 'Список'", () => {
   beforeEach(() => {
     cy.visit('/list');
   });
 
-  it('Начальное состояние страницы отрисовано корректно', () => {
+  it("Начальное состояние страницы отрисовано корректно", () => {
     cy.get(inputValue).should('have.value', '');
     cy.get(indexValue).should('have.value', '');
     cy.get(addAtHeadButton).should('be.disabled');
@@ -40,7 +40,7 @@ describe('Тестирование визуализации структуры �
     cy.get(deleteAtIndexButton).should('be.disabled');
   });
 
-  it('Добавление элемента в head реализовано корректно', () => {
+  it("Добавление элемента в head реализовано корректно", () => {
     const value = "666";
     cy.get(inputValue).type(value);
     cy.get(addAtHeadButton).should('not.be.disabled');
@@ -53,27 +53,27 @@ describe('Тестирование визуализации структуры �
         .find(circleSmall)
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(changingState));
-      cy.get(item[0]).find(circleSmall).children().should("have.text", value);
+      cy.get(item[0]).find(circleSmall).children().should('have.text', value);
     });
     cy.wait(SHORT_DELAY_IN_MS);
     cy.get(circle).then((item) => {
       cy.get(item[0])
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(modifiedState));
-      cy.get(item[0]).children().should("have.text", value);
+      cy.get(item[0]).children().should('have.text', value);
     });
     cy.wait(SHORT_DELAY_IN_MS);
     cy.get(circle).then((item) => {
       cy.get(item[0])
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(defaultState));
-      cy.get(item[0]).children().should("have.text", value);
+      cy.get(item[0]).children().should('have.text', value);
     });
-    cy.get(inputValue).should("have.text", '');
+    cy.get(inputValue).should('have.text', '');
     cy.get(addAtHeadButton).should('be.disabled');
   });
 
-  it('Добавление элемента в tail реализовано корректно', () => {
+  it("Добавление элемента в tail реализовано корректно", () => {
     const value = "666";
     let arrayOfCircles = [];
     getCirclesData(arrayOfCircles);
@@ -88,32 +88,32 @@ describe('Тестирование визуализации структуры �
         .find(circleSmall)
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(changingState));
-      cy.get(item[arrayOfCircles.length - 1]).find(circleSmall).children().should("have.text", value);
+      cy.get(item[arrayOfCircles.length - 1]).find(circleSmall).children().should('have.text', value);
     });
     cy.wait(SHORT_DELAY_IN_MS);
     cy.get(circle).then((item) => {
       cy.get(item[arrayOfCircles.length])
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(modifiedState));
-      cy.get(item[arrayOfCircles.length]).children().should("have.text", value);
+      cy.get(item[arrayOfCircles.length]).children().should('have.text', value);
     });
     cy.wait(SHORT_DELAY_IN_MS);
     cy.get(circle).then((item) => {
       cy.get(item[arrayOfCircles.length])
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(defaultState));
-      cy.get(item[arrayOfCircles.length]).children().should("have.text", value);
+      cy.get(item[arrayOfCircles.length]).children().should('have.text', value);
     });
-    cy.get(inputValue).should("have.text", '');
+    cy.get(inputValue).should('have.text', '');
     cy.get(addAtTailButton).should('be.disabled');
   });
 
-  it('Добавление элемента по индексу реализовано корректно', () => {
+  it("Добавление элемента по индексу реализовано корректно", () => {
     const value = "666";
     const index = "1";
     cy.get(inputValue).type(value);
     cy.get(indexValue).type(index);
-    cy.get(addAtIndexButton).should("not.be.disabled");
+    cy.get(addAtIndexButton).should('not.be.disabled');
     cy.get(addAtIndexButton).click();
     cy.get(addAtIndexButton)
       .invoke("attr", "class")
@@ -124,31 +124,31 @@ describe('Тестирование визуализации структуры �
         .find(circleSmall)
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(changingState));
-      cy.get(item[index]).find(circleSmall).children().should("have.text", value);
+      cy.get(item[index]).find(circleSmall).children().should('have.text', value);
     });
     cy.wait(SHORT_DELAY_IN_MS);
     cy.get(circle).then((item) => {
       cy.get(item[index])
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(modifiedState));
-      cy.get(item[index]).children().should("have.text", value);
+      cy.get(item[index]).children().should('have.text', value);
     });
     cy.wait(SHORT_DELAY_IN_MS);
     cy.get(circle).then((item) => {
       cy.get(item[index])
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(defaultState));
-      cy.get(item[index]).children().should("have.text", value);
+      cy.get(item[index]).children().should('have.text', value);
     });
-    cy.get(indexValue).should("have.text", '');
-    cy.get(inputValue).should("have.text", '');
-    cy.get(addAtIndexButton).should("be.disabled");
+    cy.get(indexValue).should('have.text', '');
+    cy.get(inputValue).should('have.text', '');
+    cy.get(addAtIndexButton).should('be.disabled');
   });
 
-  it('Удаление элемента из head реализовано корректно', () => {
+  it("Удаление элемента из head реализовано корректно", () => {
     let arrayOfCircles = [];
     getCirclesData(arrayOfCircles);
-    cy.get(deleteAtHeadButton).should("not.be.disabled");
+    cy.get(deleteAtHeadButton).should('not.be.disabled');
     cy.get(deleteAtHeadButton).click();
     cy.get(deleteAtHeadButton)
       .invoke("attr", "class")
@@ -158,20 +158,20 @@ describe('Тестирование визуализации структуры �
         .find(circleSmall)
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(changingState));
-      cy.get(item[0]).find(circleSmall).children().should("have.text", arrayOfCircles[0]);
+      cy.get(item[0]).find(circleSmall).children().should('have.text', arrayOfCircles[0]);
     });
     cy.get(circle).then((item) => {
       cy.get(item[0])
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(changingState));
-      cy.get(item[1]).children().should("have.text", '');
+      cy.get(item[1]).children().should('have.text', '');
     });
   });
 
-  it('Удаление элемента из tail реализовано корректно', () => {
+  it("Удаление элемента из tail реализовано корректно", () => {
     let arrayOfCircles = [];
     getCirclesData(arrayOfCircles);
-    cy.get(deleteAtTailButton).should("not.be.disabled");
+    cy.get(deleteAtTailButton).should('not.be.disabled');
     cy.get(deleteAtTailButton).click();
     cy.get(deleteAtTailButton)
       .invoke("attr", "class")
@@ -181,22 +181,22 @@ describe('Тестирование визуализации структуры �
         .find(circleSmall)
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(changingState));
-      cy.get(item[arrayOfCircles.length - 1]).find(circleSmall).children().should("have.text", arrayOfCircles[arrayOfCircles.length - 1]);
+      cy.get(item[arrayOfCircles.length - 1]).find(circleSmall).children().should('have.text', arrayOfCircles[arrayOfCircles.length - 1]);
     });
     cy.get(circle).then((item) => {
       cy.get(item[arrayOfCircles.length])
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(changingState));
-      cy.get(item[arrayOfCircles.length - 1]).children().should("have.text", '');
+      cy.get(item[arrayOfCircles.length - 1]).children().should('have.text', '');
     });
   });
 
-  it('Удаление элемента по индексу реализовано корректно', () => {
+  it("Удаление элемента по индексу реализовано корректно", () => {
     let arrayOfCircles = [];
     getCirclesData(arrayOfCircles);
     const index = "1";
     cy.get(indexValue).type(index);
-    cy.get(deleteAtIndexButton).should("not.be.disabled");
+    cy.get(deleteAtIndexButton).should('not.be.disabled');
     cy.get(deleteAtIndexButton).click();
     cy.get(deleteAtIndexButton)
       .invoke("attr", "class")
@@ -206,17 +206,17 @@ describe('Тестирование визуализации структуры �
       cy.get(item[index])
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(changingState));
-      cy.get(item[index]).children().should("have.text", '');
+      cy.get(item[index]).children().should('have.text', '');
     });
     cy.get(circleContent).then((item) => {
       cy.get(item[index])
         .find(circleSmall)
         .invoke("attr", "class")
         .then((classList) => expect(classList).contains(changingState));
-      cy.get(item[index]).find(circleSmall).children().should("have.text", arrayOfCircles[index]);
+      cy.get(item[index]).find(circleSmall).children().should('have.text', arrayOfCircles[index]);
     });
     cy.wait(SHORT_DELAY_IN_MS);
-    cy.get(indexValue).should("have.text", '');
-    cy.get(deleteAtIndexButton).should("be.disabled");
+    cy.get(indexValue).should('have.text', '');
+    cy.get(deleteAtIndexButton).should('be.disabled');
   })
 });
